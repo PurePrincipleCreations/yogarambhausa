@@ -4,12 +4,15 @@ import gsap from "gsap";
 import { Check, CheckCircle2, ChevronLeft, SkipBack, SkipForward } from "lucide-react";
 import { courses } from "@/data/courses";
 import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export function CoursePlayerPage({ slug }: { slug: string }) {
   const root = useRef<HTMLElement>(null);
   const course = useMemo(() => courses.find((item) => item.slug === slug), [slug]);
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [completed, setCompleted] = useState<Set<string>>(() => new Set());
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const login = useAuthStore((state) => state.login);
 
   useLayoutEffect(() => {
     if (!root.current || !course) return;
@@ -33,6 +36,23 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
           <Button asChild className="mt-8 rounded-full bg-ember text-primary-foreground hover:bg-ember/90">
             <Link to="/">Return to programs</Link>
           </Button>
+        </div>
+      </main>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <main className="grid min-h-screen place-items-center bg-muted px-6 text-center">
+        <div className="max-w-xl">
+          <span className="mx-auto grid size-14 place-items-center rounded-full bg-ember/10 text-2xl text-ember">Y</span>
+          <p className="mt-7 text-xs font-semibold tracking-[0.18em] text-ember uppercase">Members practice</p>
+          <h1 className="mt-4 text-4xl font-bold text-foreground sm:text-5xl">Enter the {course.title} theater.</h1>
+          <p className="mt-5 leading-relaxed text-muted-foreground">Sign in to unlock the complete curriculum, lesson progress, and focused video player.</p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Button type="button" onClick={login} className="h-11 rounded-full bg-ember px-6 text-primary-foreground hover:bg-ember/90">Sign in to Continue</Button>
+            <Button asChild variant="outline" className="h-11 rounded-full px-6"><Link to="/">Return to programs</Link></Button>
+          </div>
         </div>
       </main>
     );
