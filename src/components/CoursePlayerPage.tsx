@@ -12,7 +12,7 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [completed, setCompleted] = useState<Set<string>>(() => new Set());
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const login = useAuthStore((state) => state.login);
+  const openAuthModal = useAuthStore((state) => state.openAuthModal);
 
   useLayoutEffect(() => {
     if (!root.current || !course) return;
@@ -50,7 +50,7 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
           <h1 className="mt-4 text-4xl font-bold text-foreground sm:text-5xl">Enter the {course.title} theater.</h1>
           <p className="mt-5 leading-relaxed text-muted-foreground">Sign in to unlock the complete curriculum, lesson progress, and focused video player.</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button type="button" onClick={login} className="h-11 rounded-full bg-ember px-6 text-primary-foreground hover:bg-ember/90">Sign in to Continue</Button>
+            <Button type="button" onClick={openAuthModal} className="h-11 rounded-full bg-ember px-6 text-primary-foreground transition-all duration-300 hover:bg-ember/90">Sign in to Continue</Button>
             <Button asChild variant="outline" className="h-11 rounded-full px-6"><Link to="/">Return to programs</Link></Button>
           </div>
         </div>

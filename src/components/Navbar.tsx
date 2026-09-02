@@ -16,6 +16,7 @@ import {
 const links = [
   { label: "Programs", to: "/" as const, hash: "programs" },
   { label: "Retreats", to: "/retreats" as const },
+  { label: "Live TTC", to: "/live-ttc" as const },
   { label: "Philosophy", to: "/" as const, hash: "philosophy" },
 ];
 
@@ -23,7 +24,7 @@ export function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const user = useAuthStore((state) => state.user);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const login = useAuthStore((state) => state.login);
+  const openAuthModal = useAuthStore((state) => state.openAuthModal);
   const logout = useAuthStore((state) => state.logout);
 
   useEffect(() => {
@@ -118,14 +119,14 @@ export function Navbar() {
           ) : (
             <Button
               variant="ghost"
-              onClick={login}
+              onClick={openAuthModal}
               className="rounded-full px-4 text-sm font-medium text-slate-800 hover:bg-white/70"
             >
               Log In
             </Button>
           )}
           {!isAuthenticated && (
-            <Button onClick={login} className="rounded-full bg-ember px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_16px_35px_-14px_oklch(0.7_0.2_42/0.95)] hover:bg-ember/90">
+            <Button onClick={openAuthModal} className="rounded-full bg-ember px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_16px_35px_-14px_oklch(0.7_0.2_42/0.95)] transition-all duration-300 hover:bg-ember/90">
               Sign Up
             </Button>
           )}

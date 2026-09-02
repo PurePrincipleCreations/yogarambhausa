@@ -13,7 +13,7 @@ const filters = ["All", "Yoga", "Movement Mechanics", "Flow"];
 
 function CourseCard({ course }: { course: Course }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const login = useAuthStore((state) => state.login);
+  const openAuthModal = useAuthStore((state) => state.openAuthModal);
 
   return (
     <article className="course-card group flex min-h-[31rem] flex-col overflow-hidden rounded-3xl border border-border/60 bg-card shadow-[0_24px_65px_-35px_oklch(0.28_0.03_260/0.42)] transition-[box-shadow,transform] duration-500 hover:-translate-y-1 hover:shadow-[0_32px_80px_-34px_oklch(0.28_0.03_260/0.52)]">
@@ -62,7 +62,7 @@ function CourseCard({ course }: { course: Course }) {
               </Link>
             </Button>
           ) : (
-            <Button type="button" onClick={login} className="h-11 rounded-full bg-ember px-5 text-primary-foreground hover:bg-ember/90">
+            <Button type="button" onClick={openAuthModal} className="h-11 rounded-full bg-ember px-5 text-primary-foreground transition-all duration-300 hover:bg-ember/90">
               <LockKeyhole aria-hidden="true" /> Sign in to Unlock
             </Button>
           )}
