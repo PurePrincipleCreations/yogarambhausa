@@ -36,7 +36,7 @@ export function Method() {
   }, []);
 
   return (
-    <section ref={root} className="relative w-full bg-white py-28">
+    <section id="philosophy" ref={root} className="relative w-full bg-white py-28">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 px-6 md:grid-cols-2">
         <div ref={left} className="self-start">
           <h2 className="font-serif text-4xl leading-tight tracking-tight text-slate-900 md:text-6xl">

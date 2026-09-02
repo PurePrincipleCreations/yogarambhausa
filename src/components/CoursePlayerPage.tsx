@@ -39,6 +39,9 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
   }
 
   const activeVideo = course.videos[activeVideoIndex];
+  if (!activeVideo) {
+    return null;
+  }
   const isComplete = completed.has(activeVideo.id);
   const isLastLesson = activeVideoIndex === course.videos.length - 1;
 
@@ -62,7 +65,7 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
             <ChevronLeft className="size-4" aria-hidden="true" /> All programs
           </Link>
 
-          <div className="aspect-video w-full overflow-hidden rounded-[2rem] bg-card shadow-[0_30px_80px_-35px_oklch(0.18_0.03_260/0.6)]">
+          <div className="aspect-video w-full overflow-hidden rounded-[2rem] bg-card shadow-2xl">
             <iframe
               key={activeVideo.id}
               src={`${activeVideo.videoUrl}?rel=0&modestbranding=1`}
@@ -113,7 +116,7 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
           </div>
         </section>
 
-        <aside className="player-playlist min-h-[34rem] overflow-hidden rounded-3xl border border-border/70 bg-card/80 p-4 shadow-[0_24px_60px_-38px_oklch(0.18_0.03_260/0.55)] backdrop-blur-xl sm:p-6 lg:col-span-4 lg:h-full xl:col-span-3">
+        <aside className="player-playlist min-h-[34rem] overflow-hidden rounded-3xl border border-border/70 bg-card/80 p-4 shadow-lg backdrop-blur-xl sm:p-6 lg:col-span-4 lg:h-full xl:col-span-3">
           <div className="flex h-full flex-col">
             <header className="shrink-0 border-b border-border/70 bg-card/80 pb-5 backdrop-blur-xl">
               <p className="text-xs font-semibold tracking-[0.16em] text-ember uppercase">Your practice</p>

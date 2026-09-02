@@ -71,13 +71,22 @@ export function Navbar() {
         <ul className="hidden items-center gap-8 md:flex">
           {links.map((l) => (
             <li key={l.label} className="nav-item">
-              <Link
-                to={l.to}
-                hash={"hash" in l ? l.hash : undefined}
-                className="relative text-sm font-medium text-slate-800/80 transition-colors hover:text-slate-800 after:absolute after:-bottom-1.5 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:rounded-full after:bg-ember after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100"
-              >
-                {l.label}
-              </Link>
+              {"hash" in l ? (
+                <Link
+                  to={l.to}
+                  hash={l.hash}
+                  className="relative text-sm font-medium text-slate-800/80 transition-colors hover:text-slate-800 after:absolute after:-bottom-1.5 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:rounded-full after:bg-ember after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100"
+                >
+                  {l.label}
+                </Link>
+              ) : (
+                <Link
+                  to={l.to}
+                  className="relative text-sm font-medium text-slate-800/80 transition-colors hover:text-slate-800 after:absolute after:-bottom-1.5 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:rounded-full after:bg-ember after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100"
+                >
+                  {l.label}
+                </Link>
+              )}
             </li>
           ))}
         </ul>
