@@ -143,6 +143,53 @@
   }
 }
 
+@utility hide-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes equalizer {
+  0%, 100% { height: 35%; }
+  50% { height: 100%; }
+}
+
+.equalizer i {
+  width: 0.125rem;
+  border-radius: 999px;
+  background: currentColor;
+  animation: equalizer 0.7s ease-in-out infinite;
+}
+
+.equalizer i:nth-child(2) { animation-delay: 0.14s; }
+.equalizer i:nth-child(3) { animation-delay: 0.28s; }
+
+.course-progress {
+  appearance: none;
+  background: var(--color-muted);
+}
+
+.course-progress::-webkit-progress-bar {
+  background: var(--color-muted);
+  border-radius: 999px;
+}
+
+.course-progress::-webkit-progress-value {
+  background: var(--color-ember);
+  border-radius: 999px;
+}
+
+.course-progress::-moz-progress-bar {
+  background: var(--color-ember);
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .equalizer i { animation: none; height: 65%; }
+}
+
 /* ---- Yogarambha brand tokens ---- */
 @theme {
   --color-ember: oklch(0.7 0.2 42);
