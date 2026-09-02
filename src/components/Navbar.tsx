@@ -1,6 +1,16 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useAuth } from "@/hooks/useAuth";
+import { LogOut } from "lucide-react";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const links = [
   { label: "Programs", href: "#programs" },
@@ -10,7 +20,10 @@ const links = [
 
 export function Navbar() {
   const navRef = useRef<HTMLElement>(null);
-  const { isLoggedIn, name, logIn, logOut } = useAuth();
+  const user = useAuthStore((state) => state.user);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const login = useAuthStore((state) => state.login);
+  const logout = useAuthStore((state) => state.logout);
 
   useEffect(() => {
     if (!navRef.current) return;
@@ -34,7 +47,7 @@ export function Navbar() {
     return () => ctx.revert();
   }, []);
 
-  const initials = name
+  const initials = (user?.name ?? "Guest")
     .split(" ")
     .map((n) => n[0])
     .join("");
@@ -68,25 +81,43 @@ export function Navbar() {
         </ul>
 
         <div className="nav-item flex items-center gap-2 sm:gap-3">
-          {isLoggedIn ? (
-            <button
-              onClick={logOut}
-              aria-label="Open your profile"
-              className="grid size-10 place-items-center rounded-full border border-white/70 bg-white/80 text-xs font-semibold tracking-wide text-slate-800 shadow-[0_12px_30px_-16px_oklch(0.28_0.03_260/0.7)] transition-transform duration-200 hover:scale-105"
-            >
-              {initials}
-            </button>
+          {isAuthenticated ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Open your profile"
+                  className="size-10 rounded-full border border-background/70 bg-background/80 text-xs font-semibold tracking-wide text-foreground shadow-[0_12px_30px_-16px_oklch(0.28_0.03_260/0.7)] hover:bg-background"
+                >
+                  {initials}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 rounded-xl p-2">
+                <DropdownMenuLabel>
+                  <span className="block">{user?.name}</span>
+                  <span className="block truncate text-xs font-normal text-muted-foreground">{user?.email}</span>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={logout} className="rounded-lg py-2.5">
+                  <LogOut aria-hidden="true" /> Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
-            <button
-              onClick={logIn}
-              className="rounded-full px-4 py-2 text-sm font-medium text-slate-800 transition-colors hover:bg-white/70"
+            <Button
+              variant="ghost"
+              onClick={login}
+              className="rounded-full px-4 text-sm font-medium text-slate-800 hover:bg-white/70"
             >
               Log In
-            </button>
+            </Button>
           )}
-          <button className="rounded-full bg-ember px-5 py-2.5 text-sm font-semibold text-white shadow-[0_16px_35px_-14px_oklch(0.7_0.2_42/0.95)] transition-transform duration-200 hover:scale-[1.04]">
-            Sign Up
-          </button>
+          {!isAuthenticated && (
+            <Button onClick={login} className="rounded-full bg-ember px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_16px_35px_-14px_oklch(0.7_0.2_42/0.95)] hover:bg-ember/90">
+              Sign Up
+            </Button>
+          )}
         </div>
       </nav>
     </header>
