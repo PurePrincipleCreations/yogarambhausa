@@ -5,6 +5,7 @@ import { ArrowUpRight, LockKeyhole } from "lucide-react";
 import { courses, type Course } from "@/data/courses";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -54,18 +55,17 @@ function CourseCard({ course }: { course: Course }) {
               Sign in to view pricing
             </span>
           )}
-          <Button
-            type="button"
-            variant={isAuthenticated ? "outline" : "default"}
-            onClick={isAuthenticated ? undefined : login}
-            className={isAuthenticated ? "h-11 rounded-full px-5" : "h-11 rounded-full bg-ember px-5 text-primary-foreground hover:bg-ember/90"}
-          >
-            {isAuthenticated ? (
-              <>View Curriculum <ArrowUpRight aria-hidden="true" /></>
-            ) : (
-              <><LockKeyhole aria-hidden="true" /> Sign in to Unlock</>
-            )}
-          </Button>
+          {isAuthenticated ? (
+            <Button asChild variant="outline" className="h-11 rounded-full px-5">
+              <Link to="/courses/$slug" params={{ slug: course.slug }}>
+                View Curriculum <ArrowUpRight aria-hidden="true" />
+              </Link>
+            </Button>
+          ) : (
+            <Button type="button" onClick={login} className="h-11 rounded-full bg-ember px-5 text-primary-foreground hover:bg-ember/90">
+              <LockKeyhole aria-hidden="true" /> Sign in to Unlock
+            </Button>
+          )}
         </div>
       </div>
     </article>

@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { LogOut } from "lucide-react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,9 +14,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const links = [
-  { label: "Programs", href: "#programs" },
-  { label: "Retreats", href: "#retreats" },
-  { label: "Philosophy", href: "#philosophy" },
+  { label: "Programs", to: "/" as const, hash: "programs" },
+  { label: "Retreats", to: "/retreats" as const },
+  { label: "Philosophy", to: "/" as const, hash: "philosophy" },
 ];
 
 export function Navbar() {
@@ -58,24 +59,25 @@ export function Navbar() {
       className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 sm:pt-6"
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between gap-6 rounded-full border border-white/50 bg-white/60 px-4 py-3 shadow-[0_18px_50px_-24px_oklch(0.28_0.03_260/0.45)] backdrop-blur-md sm:px-6">
-        <a href="/" className="nav-item flex items-center gap-2.5">
+        <Link to="/" className="nav-item flex items-center gap-2.5">
           <span className="grid size-9 place-items-center rounded-full bg-ember text-sm font-semibold tracking-tight text-white shadow-[0_10px_25px_-10px_oklch(0.7_0.2_42/0.9)]">
             Y
           </span>
           <span className="font-display text-[0.95rem] font-semibold tracking-[0.18em] text-slate-800 uppercase">
             Yogarambha
           </span>
-        </a>
+        </Link>
 
         <ul className="hidden items-center gap-8 md:flex">
           {links.map((l) => (
             <li key={l.label} className="nav-item">
-              <a
-                href={l.href}
+              <Link
+                to={l.to}
+                hash={"hash" in l ? l.hash : undefined}
                 className="relative text-sm font-medium text-slate-800/80 transition-colors hover:text-slate-800 after:absolute after:-bottom-1.5 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:rounded-full after:bg-ember after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100"
               >
                 {l.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
