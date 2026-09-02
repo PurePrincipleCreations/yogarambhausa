@@ -2,6 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AuthProvider } from "@/hooks/useAuth";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
+import { Method } from "@/components/Method";
+import { Qualifications } from "@/components/Qualifications";
+import { Syllabus } from "@/components/Syllabus";
+import { Facilitators } from "@/components/Facilitators";
 
 export const Route = createFileRoute("/")({
   ssr: false,
@@ -27,7 +31,7 @@ export const Route = createFileRoute("/")({
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap",
       },
     ],
   }),
@@ -40,6 +44,10 @@ function Index() {
       <main className="min-h-screen bg-canvas font-sans antialiased">
         <Navbar />
         <Hero />
+        <Method />
+        <Qualifications />
+        <Syllabus />
+        <Facilitators />
       </main>
     </AuthProvider>
   );
