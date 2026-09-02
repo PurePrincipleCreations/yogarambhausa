@@ -10,12 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LiveTtcRouteImport } from './routes/live-ttc'
 import { Route as RetreatsRouteImport } from './routes/retreats'
 import { Route as CoursesSlugRouteImport } from './routes/courses.$slug'
+import { Route as LegalDocumentRouteImport } from './routes/legal.$document'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LiveTtcRoute = LiveTtcRouteImport.update({
+  id: '/live-ttc',
+  path: '/live-ttc',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RetreatsRoute = RetreatsRouteImport.update({
@@ -28,35 +35,55 @@ const CoursesSlugRoute = CoursesSlugRouteImport.update({
   path: '/courses/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LegalDocumentRoute = LegalDocumentRouteImport.update({
+  id: '/legal/$document',
+  path: '/legal/$document',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/live-ttc': typeof LiveTtcRoute
   '/retreats': typeof RetreatsRoute
   '/courses/$slug': typeof CoursesSlugRoute
+  '/legal/$document': typeof LegalDocumentRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/live-ttc': typeof LiveTtcRoute
   '/retreats': typeof RetreatsRoute
   '/courses/$slug': typeof CoursesSlugRoute
+  '/legal/$document': typeof LegalDocumentRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/live-ttc': typeof LiveTtcRoute
   '/retreats': typeof RetreatsRoute
   '/courses/$slug': typeof CoursesSlugRoute
+  '/legal/$document': typeof LegalDocumentRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/retreats' | '/courses/$slug'
+  fullPaths:
+    '/' | '/live-ttc' | '/retreats' | '/courses/$slug' | '/legal/$document'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/retreats' | '/courses/$slug'
-  id: '__root__' | '/' | '/retreats' | '/courses/$slug'
+  to: '/' | '/live-ttc' | '/retreats' | '/courses/$slug' | '/legal/$document'
+  id:
+    | '__root__'
+    | '/'
+    | '/live-ttc'
+    | '/retreats'
+    | '/courses/$slug'
+    | '/legal/$document'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LiveTtcRoute: typeof LiveTtcRoute
   RetreatsRoute: typeof RetreatsRoute
   CoursesSlugRoute: typeof CoursesSlugRoute
+  LegalDocumentRoute: typeof LegalDocumentRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/live-ttc': {
+      id: '/live-ttc'
+      path: '/live-ttc'
+      fullPath: '/live-ttc'
+      preLoaderRoute: typeof LiveTtcRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/retreats': {
@@ -82,13 +116,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/legal/$document': {
+      id: '/legal/$document'
+      path: '/legal/$document'
+      fullPath: '/legal/$document'
+      preLoaderRoute: typeof LegalDocumentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LiveTtcRoute: LiveTtcRoute,
   RetreatsRoute: RetreatsRoute,
   CoursesSlugRoute: CoursesSlugRoute,
+  LegalDocumentRoute: LegalDocumentRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
