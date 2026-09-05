@@ -67,11 +67,11 @@ export function Hero() {
 
 
 
-        <p className="hero-sanskrit mb-6 text-[0.7rem] font-medium tracking-[0.34em] text-slate-800/45 uppercase sm:text-xs">
+        <p className="hero-sanskrit mb-6 font-serif text-[0.7rem] font-medium tracking-[0.22em] text-ember/80 uppercase sm:text-xs">
           Yogaḥ karmasu kauśalam
         </p>
 
-        <h1 className="font-display text-[2rem] leading-[1.06] font-normal tracking-[-0.02em] text-slate-800 sm:text-5xl lg:text-6xl">
+        <h1 className="font-display text-[2.65rem] leading-[1.04] font-normal tracking-normal text-slate-800 sm:text-6xl lg:text-7xl">
           {headline.map((line) => (
             <span key={line} className="block overflow-hidden py-[0.12em]">
               <span className="hero-line-inner block">{line}</span>
@@ -79,7 +79,7 @@ export function Hero() {
           ))}
         </h1>
 
-        <p className="hero-sub mx-auto mt-7 max-w-xl text-base leading-relaxed text-slate-800/65 sm:text-lg">
+        <p className="hero-sub mx-auto mt-7 max-w-xl font-serif text-base leading-relaxed text-slate-800/65 italic sm:text-lg">
           Yogarambha carries an unbroken thread of Indian yoga and movement practice — breath,
           body and philosophy taught slowly, precisely, and in small circles, the way it has
           always been passed on.
@@ -91,14 +91,14 @@ export function Hero() {
             hash="programs"
             className="hero-cta rounded-full bg-ember px-7 py-3.5 text-sm font-semibold text-white shadow-[0_24px_50px_-20px_oklch(0.7_0.2_42/0.95)] transition-transform duration-200 hover:scale-[1.04]"
           >
-            Begin Your Practice
+            Explore Programs
           </Link>
           <Link
             to="/"
             hash="philosophy"
             className="hero-cta rounded-full border border-white/70 bg-white/60 px-7 py-3.5 text-sm font-semibold text-slate-800 backdrop-blur-md transition-transform duration-200 hover:scale-[1.04]"
           >
-            The Tradition
+            Our Philosophy
           </Link>
         </div>
 
@@ -108,7 +108,7 @@ export function Hero() {
         ref={cardRef}
         className="absolute right-4 bottom-8 z-10 hidden w-[22rem] rounded-[2rem] border border-white/60 bg-white/45 p-6 shadow-[0_40px_80px_-40px_oklch(0.28_0.03_260/0.6)] backdrop-blur-lg lg:right-12 lg:bottom-14 lg:block"
       >
-        <p className="font-display text-[0.95rem] leading-relaxed text-slate-800/85">
+        <p className="font-serif text-[0.95rem] leading-relaxed text-slate-800/85 italic">
           "Where is the delusion when truth is known? Where is the disease when the mind is
           clear? Where is death when the Breath is controlled? Therefore surrender to Yoga."
         </p>
