@@ -5,7 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import veer from "@/assets/facilitator-veer.jpg";
 import { Button } from "@/components/ui/button";
-import { MENTORSHIP_DURATION_MONTHS, MENTORSHIP_PRICE } from "@/lib/mentorship";
+import { MENTORSHIP_DURATION_MONTHS } from "@/lib/mentorship";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -48,7 +48,7 @@ export function MentorshipTeaser() {
                   Explore the mentorship <ArrowUpRight aria-hidden="true" />
                 </Link>
               </Button>
-              <span className="text-sm text-background/60">${MENTORSHIP_PRICE}/month · limited roster</span>
+              <span className="text-sm text-background/60">Limited private roster</span>
             </div>
           </div>
           <div className="mentorship-reveal relative min-h-[18rem]">

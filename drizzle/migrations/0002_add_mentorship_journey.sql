@@ -1,0 +1,1 @@
+ALTER TABLE public.mentorship_bookings ADD COLUMN journey TEXT;

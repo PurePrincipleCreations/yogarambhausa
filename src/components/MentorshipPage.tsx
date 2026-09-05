@@ -6,7 +6,7 @@ import veer from "@/assets/facilitator-veer.jpg";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { MentorshipScheduler } from "@/components/MentorshipScheduler";
-import { MENTORSHIP_DURATION_MONTHS, MENTORSHIP_PRICE } from "@/lib/mentorship";
+import { MENTORSHIP_DURATION_MONTHS } from "@/lib/mentorship";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -43,17 +43,10 @@ const PILLARS = [
   },
 ];
 
-const TIMELINE = [
-  { phase: "Months 1–3", title: "Assessment & Foundations", body: "Movement screen, breath audit and a rebuilt daily practice you can actually sustain." },
-  { phase: "Months 4–6", title: "Strength & Structure", body: "Progressive loading, joint integrity and the strength work that makes advanced shapes safe." },
-  { phase: "Months 7–9", title: "Depth & Pranayama", body: "Classical breathwork, subtle-body study and longer self-led sessions with weekly review." },
-  { phase: "Months 10–12", title: "Teaching & Autonomy", body: "You learn to program for yourself — and, if you choose, for others. Graduation on your own terms." },
-];
-
 const FAQ = [
-  { q: "Do I need to be advanced?", a: "No. You need to be committed. Veer has mentored complete beginners and 15-year practitioners in the same year." },
-  { q: "What if I miss a month?", a: "Sessions roll forward within the year. Life happens; the programme adapts." },
-  { q: "Can I cancel?", a: "Yes. It's a monthly commitment across a twelve-month arc — you can stop at the end of any month." },
+  { q: "Who is this mentorship for?", a: "It is for sincere practitioners who want close guidance and are ready to engage consistently. Your current level matters less than your willingness to learn." },
+  { q: "How is the mentorship shaped around me?", a: "Veer begins with your history, present practice, body and aspirations, then adapts the work as you develop. There is no standard syllabus imposed on every student." },
+  { q: "What happens after the discovery call?", a: "If the mentorship feels right for both you and Veer, you will receive a personal recommendation for the way forward, including the commitment and practical details." },
 ];
 
 export function MentorshipPage() {
@@ -69,14 +62,6 @@ export function MentorshipPage() {
         stagger: 0.09,
         ease: "power3.out",
         scrollTrigger: { trigger: ".mentor-pillars", start: "top 78%", once: true },
-      });
-      gsap.from(".mentor-phase", {
-        x: -30,
-        opacity: 0,
-        duration: 0.75,
-        stagger: 0.12,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ".mentor-timeline", start: "top 78%", once: true },
       });
     }, root);
     return () => ctx.revert();
@@ -114,9 +99,7 @@ export function MentorshipPage() {
                 Book a call with Veer <ArrowDown aria-hidden="true" />
               </a>
             </Button>
-            <span className="text-sm text-background/70">
-              ${MENTORSHIP_PRICE}/month · limited roster
-            </span>
+            <span className="text-sm text-background/70">Limited private roster</span>
           </div>
         </div>
       </section>
@@ -144,38 +127,13 @@ export function MentorshipPage() {
         </div>
       </section>
 
-      <section className="mentor-timeline bg-muted/65 py-24 md:py-32">
-        <div className="mx-auto max-w-5xl px-6">
-          <p className="text-xs font-semibold tracking-[0.2em] text-ember uppercase">The arc</p>
-          <h2 className="mt-4 font-display text-4xl font-semibold text-foreground md:text-5xl">
-            Twelve months, four phases
-          </h2>
-          <div className="mt-14 space-y-4">
-            {TIMELINE.map((item) => (
-              <div
-                key={item.phase}
-                className="mentor-phase grid gap-4 rounded-3xl border border-border/60 bg-card p-8 md:grid-cols-[9rem_1fr] md:items-baseline"
-              >
-                <span className="text-xs font-semibold tracking-[0.16em] text-ember uppercase">{item.phase}</span>
-                <div>
-                  <h3 className="text-2xl font-semibold text-card-foreground">{item.title}</h3>
-                  <p className="mt-2 leading-relaxed text-muted-foreground">{item.body}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className="mx-auto max-w-6xl px-6 py-24 md:py-28">
         <div className="grid gap-10 rounded-[2.5rem] bg-foreground p-10 text-background md:grid-cols-[1fr_auto] md:items-center md:p-14">
           <div>
-            <h2 className="font-display text-4xl font-semibold md:text-5xl">
-              ${MENTORSHIP_PRICE} <span className="text-2xl font-normal text-background/60">/ month</span>
-            </h2>
+            <h2 className="font-display text-4xl font-semibold md:text-5xl">Begin with a conversation</h2>
             <p className="mt-4 max-w-xl leading-relaxed text-background/70">
-              Billed monthly across a twelve-month arc. Includes every 1:1 session, direct access
-              to Veer, the full practice library and priority on Himalayan retreats.
+              Your discovery call is a chance to share your journey, explore whether the mentorship
+              is the right fit and hear the details directly from Veer.
             </p>
           </div>
           <Button asChild className="h-14 rounded-full bg-ember px-8 text-base font-semibold text-primary-foreground hover:bg-ember/90">

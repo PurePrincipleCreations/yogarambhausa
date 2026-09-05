@@ -9,7 +9,7 @@ export const Route = createFileRoute("/mentorship")({
       {
         name: "description",
         content:
-          "A 12-month private mentorship with Veer: dedicated 1:1 attention, monthly video labs, direct access all year. $200/month. Book a discovery call.",
+          "A 12-month private mentorship with Veer: dedicated 1:1 attention, monthly video labs and direct access all year. Book a discovery call.",
       },
       { property: "og:title", content: "Go Beyond Yoga — 12-Month Mentorship with Veer" },
       {

@@ -1,4 +1,3 @@
-export const MENTORSHIP_PRICE = 200;
 export const MENTORSHIP_DURATION_MONTHS = 12;
 export const CALL_LENGTH_MINUTES = 30;
 

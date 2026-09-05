@@ -47,6 +47,7 @@ export function MentorshipScheduler() {
       email: string;
       phone: string;
       goals: string;
+      journey: string;
       startsAt: string;
       timezone: string;
     }) => book({ data: payload }),
@@ -74,6 +75,7 @@ export function MentorshipScheduler() {
       email: String(form.get("email") ?? ""),
       phone: String(form.get("phone") ?? ""),
       goals: String(form.get("goals") ?? ""),
+      journey: String(form.get("journey") ?? ""),
       startsAt: selected,
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Kolkata",
     });
@@ -188,6 +190,10 @@ export function MentorshipScheduler() {
         <div className="grid gap-2">
           <Label htmlFor="mentorship-phone">Phone (optional)</Label>
           <Input id="mentorship-phone" name="phone" placeholder="+91" className="h-12 rounded-xl bg-background" />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="mentorship-journey">Tell us about your journey</Label>
+          <Textarea id="mentorship-journey" name="journey" rows={3} required placeholder="Share what brought you to this point in your practice." className="rounded-xl bg-background" />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="mentorship-goals">What do you want to go beyond?</Label>
