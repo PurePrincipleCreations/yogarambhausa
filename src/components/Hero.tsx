@@ -21,6 +21,8 @@ export function Hero() {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
       tl.from(".hero-eyebrow", { y: 20, opacity: 0, duration: 0.8 }, 0.15)
+        .from(".hero-sanskrit", { y: 14, opacity: 0, duration: 0.9 }, 0.3)
+
         .from(
           ".hero-line-inner",
           { yPercent: 118, opacity: 0, duration: 1.15, stagger: 0.14 },
