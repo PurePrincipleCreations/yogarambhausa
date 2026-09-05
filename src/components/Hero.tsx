@@ -52,10 +52,12 @@ export function Hero() {
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-4xl px-6 text-center">
-        <p className="hero-eyebrow mb-6 inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/60 px-4 py-1.5 text-[0.68rem] font-medium tracking-[0.28em] text-slate-800/70 uppercase backdrop-blur-md">
-          <span className="size-1.5 rounded-full bg-ember" />
-          Movement · Breath · Philosophy
-        </p>
+        <div className="hero-eyebrow mb-8 inline-flex items-center gap-5 rounded-full border border-white/60 bg-white/60 px-6 py-3 backdrop-blur-md">
+          <img src={yogarambhaLogo.url} alt="Yogarambha" className="h-9 w-auto object-contain sm:h-11" />
+          <span className="h-8 w-px bg-slate-800/15" aria-hidden="true" />
+          <img src={kasratshalaLogo.url} alt="Kasratshala" className="h-9 w-auto object-contain sm:h-11" />
+        </div>
+
 
         <h1 className="font-display text-[2rem] leading-[1.06] font-semibold tracking-[-0.02em] text-slate-800 sm:text-5xl lg:text-6xl">
           {headline.map((line) => (
