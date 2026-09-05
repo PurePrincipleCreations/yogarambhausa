@@ -17,8 +17,8 @@ const links = [
   { label: "Programs", to: "/" as const, hash: "programs" },
   { label: "Retreats", to: "/retreats" as const },
   { label: "Live TTC", to: "/live-ttc" as const },
-  { label: "Philosophy", to: "/" as const, hash: "philosophy" },
 ];
+
 
 export function Navbar() {
   const navRef = useRef<HTMLElement>(null);
