@@ -22,6 +22,8 @@ export type Course = {
   price: number;
   description: string;
   thumbnail: string;
+  /** YouTube id used for the silent hover preview on the catalog card. */
+  previewVideoId?: string;
   trailerUrl: string;
   category: "Yoga" | "Movement Mechanics" | "Flow";
   videos: CourseVideo[];
@@ -38,6 +40,16 @@ function playlist(slug: string, titles: Array<[string, string]>): CourseVideo[] 
     videoUrl: lessonUrl,
   }));
 }
+
+function youtubePlaylist(slug: string, items: Array<[string, string]>): CourseVideo[] {
+  return items.map(([title, videoId], index) => ({
+    id: `${slug}-${index + 1}`,
+    title,
+    duration: "Full class",
+    videoUrl: `https://www.youtube.com/embed/${videoId}`,
+  }));
+}
+
 
 export const courses: Course[] = [
   {
