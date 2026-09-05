@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight, LockKeyhole } from "lucide-react";
@@ -14,28 +14,75 @@ const filters = ["All", "Yoga", "Movement Mechanics", "Flow"];
 function CourseCard({ course }: { course: Course }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const openAuthModal = useAuthStore((state) => state.openAuthModal);
+  const [isPreviewing, setIsPreviewing] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearTimer = () => {
+    if (timer.current) {
+      clearTimeout(timer.current);
+      timer.current = null;
+    }
+  };
+
+  useEffect(() => clearTimer, []);
+
+  const startPreview = () => {
+    if (!course.previewVideoId) return;
+    clearTimer();
+    setIsPreviewing(true);
+    timer.current = setTimeout(() => setIsPreviewing(false), 10_000);
+  };
+
+  const stopPreview = () => {
+    clearTimer();
+    setIsPreviewing(false);
+  };
 
   return (
-    <article className="course-card group flex min-h-[31rem] flex-col overflow-hidden rounded-3xl border border-border/60 bg-card shadow-[0_24px_65px_-35px_oklch(0.28_0.03_260/0.42)] transition-[box-shadow,transform] duration-500 hover:-translate-y-1 hover:shadow-[0_32px_80px_-34px_oklch(0.28_0.03_260/0.52)]">
+    <article
+      onMouseEnter={startPreview}
+      onMouseLeave={stopPreview}
+      className="course-card group flex min-h-[31rem] flex-col overflow-hidden rounded-3xl border border-border/60 bg-card shadow-[0_24px_65px_-35px_oklch(0.28_0.03_260/0.42)] transition-[box-shadow,transform] duration-500 hover:-translate-y-1 hover:shadow-[0_32px_80px_-34px_oklch(0.28_0.03_260/0.52)]"
+    >
       <div className="relative aspect-[3/2] overflow-hidden">
+
         <img
           src={course.thumbnail}
           alt={`${course.title} course`}
           loading="lazy"
           width={1200}
           height={800}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+          className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] ${isPreviewing ? "opacity-0" : "opacity-100"}`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-foreground/45 via-transparent to-transparent" />
-        <span className="absolute left-5 top-5 rounded-full bg-background/75 px-3.5 py-2 text-[0.68rem] font-semibold tracking-[0.12em] text-foreground uppercase shadow-sm backdrop-blur-md">
+        {isPreviewing && course.previewVideoId && (
+          <iframe
+            src={`https://www.youtube.com/embed/${course.previewVideoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${course.previewVideoId}&modestbranding=1&playsinline=1&rel=0`}
+            title={`${course.title} preview`}
+            allow="autoplay; encrypted-media"
+            className="pointer-events-none absolute inset-0 h-full w-full scale-[1.6] border-0"
+          />
+        )}
+        <button
+          type="button"
+          onClick={() => {
+            if (!isAuthenticated) openAuthModal();
+          }}
+          aria-label={`${course.title} preview`}
+          className="absolute inset-0 z-10 cursor-pointer"
+        >
+          <span className="sr-only">Open {course.title}</span>
+        </button>
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-foreground/45 via-transparent to-transparent" />
+        <span className="pointer-events-none absolute left-5 top-5 rounded-full bg-background/75 px-3.5 py-2 text-[0.68rem] font-semibold tracking-[0.12em] text-foreground uppercase shadow-sm backdrop-blur-md">
           {course.category}
         </span>
         {!isAuthenticated && (
-          <span className="absolute bottom-5 right-5 inline-flex items-center gap-2 rounded-full border border-background/50 bg-background/70 px-4 py-2 text-xs font-semibold text-foreground shadow-lg backdrop-blur-md">
+          <span className="pointer-events-none absolute bottom-5 right-5 inline-flex items-center gap-2 rounded-full border border-background/50 bg-background/70 px-4 py-2 text-xs font-semibold text-foreground shadow-lg backdrop-blur-md">
             <LockKeyhole className="size-3.5" aria-hidden="true" /> Premium
           </span>
         )}
       </div>
+
 
       <div className="flex flex-1 flex-col p-6">
         <h3 className="text-2xl font-semibold text-card-foreground">{course.title}</h3>

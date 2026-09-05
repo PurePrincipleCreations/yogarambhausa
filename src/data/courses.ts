@@ -22,6 +22,8 @@ export type Course = {
   price: number;
   description: string;
   thumbnail: string;
+  /** YouTube id used for the silent hover preview on the catalog card. */
+  previewVideoId?: string;
   trailerUrl: string;
   category: "Yoga" | "Movement Mechanics" | "Flow";
   videos: CourseVideo[];
@@ -39,6 +41,16 @@ function playlist(slug: string, titles: Array<[string, string]>): CourseVideo[] 
   }));
 }
 
+function youtubePlaylist(slug: string, items: Array<[string, string]>): CourseVideo[] {
+  return items.map(([title, videoId], index) => ({
+    id: `${slug}-${index + 1}`,
+    title,
+    duration: "Full class",
+    videoUrl: `https://www.youtube.com/embed/${videoId}`,
+  }));
+}
+
+
 export const courses: Course[] = [
   {
     id: "course-kali-yoga",
@@ -49,11 +61,15 @@ export const courses: Course[] = [
     description:
       "A fierce, embodied practice that channels grounded strength into fluid expression. Build focus, resilience, and a deeper relationship with your instinctive intelligence.",
     thumbnail: kaliYogaImage,
-    trailerUrl: previewUrl,
-    videos: playlist("kali-yoga", [
-      ["Entering the Practice", "12:40"], ["Rooting Through the Feet", "18:15"],
-      ["Strength of the Spine", "22:30"], ["Rhythm and Release", "16:45"],
-      ["The Kali Sequence", "34:10"], ["Integration", "11:20"],
+    previewVideoId: "BfyQIy7f3mY",
+    trailerUrl: "https://www.youtube.com/embed/BfyQIy7f3mY",
+    videos: youtubePlaylist("kali-yoga", [
+      ["EP 02 · Kali Yoga", "BfyQIy7f3mY"],
+      ["EP 03 · Kali Yoga", "TJ0qp13Qigg"],
+      ["EP 04 · Yoga for Immunity", "6542C-8PJCg"],
+      ["EP 05 · Kali Yoga", "_hFvfxa3oaU"],
+      ["EP 06 · Kali Yoga", "Pec0cEpUla4"],
+      ["EP 07 · Kali Yoga", "RZOm1WJjzhc"],
     ]),
   },
   {
@@ -65,13 +81,20 @@ export const courses: Course[] = [
     description:
       "Move with precision through intelligently sequenced, breath-led practices. Each class develops grace, stamina, and an effortless quality of attention.",
     thumbnail: vinyasaFlowImage,
-    trailerUrl: previewUrl,
-    videos: playlist("vinyasa-flow", [
-      ["The Architecture of Flow", "14:00"], ["Breath as Metronome", "19:30"],
-      ["Spinal Waves", "21:10"], ["Standing Mandala", "28:20"],
-      ["Creative Transitions", "25:45"], ["Complete Flow", "42:00"],
+    previewVideoId: "GFD7OefOd5A",
+    trailerUrl: "https://www.youtube.com/embed/GFD7OefOd5A",
+    videos: youtubePlaylist("vinyasa-flow", [
+      ["Day 1 · Class 1", "GFD7OefOd5A"],
+      ["Day 1 · Class 2", "jTJedGJ1Ad0"],
+      ["Day 2 · Class 3", "G6JW9EX_Uy4"],
+      ["Day 2 · Class 4", "pEIuy6YbhUI"],
+      ["Day 3 · Class 5", "ZbLBlVljdd0"],
+      ["Day 3 · Class 6", "xCl2qzbFtmc"],
+      ["Day 4 · Class 7", "ulHzRO6R528"],
+      ["Day 4 · Class 8", "xfAF2M9B8fY"],
     ]),
   },
+
   {
     id: "course-yoga-strength",
     title: "Yoga for Strength",

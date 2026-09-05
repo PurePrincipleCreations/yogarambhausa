@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LiveTtcRouteImport } from './routes/live-ttc'
+import { Route as MentorshipRouteImport } from './routes/mentorship'
 import { Route as RetreatsRouteImport } from './routes/retreats'
 import { Route as CoursesSlugRouteImport } from './routes/courses.$slug'
 import { Route as LegalDocumentRouteImport } from './routes/legal.$document'
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
 const LiveTtcRoute = LiveTtcRouteImport.update({
   id: '/live-ttc',
   path: '/live-ttc',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MentorshipRoute = MentorshipRouteImport.update({
+  id: '/mentorship',
+  path: '/mentorship',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RetreatsRoute = RetreatsRouteImport.update({
@@ -44,6 +50,7 @@ const LegalDocumentRoute = LegalDocumentRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/live-ttc': typeof LiveTtcRoute
+  '/mentorship': typeof MentorshipRoute
   '/retreats': typeof RetreatsRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/live-ttc': typeof LiveTtcRoute
+  '/mentorship': typeof MentorshipRoute
   '/retreats': typeof RetreatsRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
@@ -59,6 +67,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/live-ttc': typeof LiveTtcRoute
+  '/mentorship': typeof MentorshipRoute
   '/retreats': typeof RetreatsRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
@@ -66,13 +75,25 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/live-ttc' | '/retreats' | '/courses/$slug' | '/legal/$document'
+    | '/'
+    | '/live-ttc'
+    | '/mentorship'
+    | '/retreats'
+    | '/courses/$slug'
+    | '/legal/$document'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/live-ttc' | '/retreats' | '/courses/$slug' | '/legal/$document'
+  to:
+    | '/'
+    | '/live-ttc'
+    | '/mentorship'
+    | '/retreats'
+    | '/courses/$slug'
+    | '/legal/$document'
   id:
     | '__root__'
     | '/'
     | '/live-ttc'
+    | '/mentorship'
     | '/retreats'
     | '/courses/$slug'
     | '/legal/$document'
@@ -81,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LiveTtcRoute: typeof LiveTtcRoute
+  MentorshipRoute: typeof MentorshipRoute
   RetreatsRoute: typeof RetreatsRoute
   CoursesSlugRoute: typeof CoursesSlugRoute
   LegalDocumentRoute: typeof LegalDocumentRoute
@@ -100,6 +122,13 @@ declare module '@tanstack/react-router' {
       path: '/live-ttc'
       fullPath: '/live-ttc'
       preLoaderRoute: typeof LiveTtcRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mentorship': {
+      id: '/mentorship'
+      path: '/mentorship'
+      fullPath: '/mentorship'
+      preLoaderRoute: typeof MentorshipRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/retreats': {
@@ -129,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LiveTtcRoute: LiveTtcRoute,
+  MentorshipRoute: MentorshipRoute,
   RetreatsRoute: RetreatsRoute,
   CoursesSlugRoute: CoursesSlugRoute,
   LegalDocumentRoute: LegalDocumentRoute,

@@ -2,6 +2,9 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { LogOut } from "lucide-react";
 import { useAuthStore } from "@/stores/useAuthStore";
+import yogarambhaLogo from "@/assets/logo-yogarambha.png.asset.json";
+import kasratshalaLogo from "@/assets/logo-kasratshala.png.asset.json";
+
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import {
@@ -17,8 +20,8 @@ const links = [
   { label: "Programs", to: "/" as const, hash: "programs" },
   { label: "Retreats", to: "/retreats" as const },
   { label: "Live TTC", to: "/live-ttc" as const },
-  { label: "Philosophy", to: "/" as const, hash: "philosophy" },
 ];
+
 
 export function Navbar() {
   const navRef = useRef<HTMLElement>(null);
@@ -60,13 +63,11 @@ export function Navbar() {
       className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 sm:pt-6"
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between gap-6 rounded-full border border-white/50 bg-white/60 px-4 py-3 shadow-[0_18px_50px_-24px_oklch(0.28_0.03_260/0.45)] backdrop-blur-md sm:px-6">
-        <Link to="/" className="nav-item flex items-center gap-2.5">
-          <span className="grid size-9 place-items-center rounded-full bg-ember text-sm font-semibold tracking-tight text-white shadow-[0_10px_25px_-10px_oklch(0.7_0.2_42/0.9)]">
-            Y
-          </span>
-          <span className="font-display text-[0.95rem] font-semibold tracking-[0.18em] text-slate-800 uppercase">
-            Yogarambha
-          </span>
+        <Link to="/" className="nav-item flex items-center gap-3">
+          <img src={yogarambhaLogo.url} alt="Yogarambha" className="h-9 w-auto object-contain" />
+          <span className="h-6 w-px bg-slate-800/15" aria-hidden="true" />
+          <img src={kasratshalaLogo.url} alt="Kasratshala" className="h-9 w-auto object-contain" />
+
         </Link>
 
         <ul className="hidden items-center gap-8 md:flex">
