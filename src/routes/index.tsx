@@ -6,6 +6,8 @@ import { Qualifications } from "@/components/Qualifications";
 import { Syllabus } from "@/components/Syllabus";
 import { Facilitators } from "@/components/Facilitators";
 import { BundleCatalog } from "@/components/BundleCatalog";
+import { MentorshipTeaser } from "@/components/MentorshipTeaser";
+
 
 export const Route = createFileRoute("/")({
   ssr: false,
@@ -48,6 +50,8 @@ function Index() {
       <BundleCatalog />
       <Syllabus />
       <Facilitators />
+      <MentorshipTeaser />
+
     </main>
   );
 }
