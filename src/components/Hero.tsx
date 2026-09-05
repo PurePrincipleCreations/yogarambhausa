@@ -1,12 +1,14 @@
 import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { Link } from "@tanstack/react-router";
 import yogarambhaLogo from "@/assets/logo-yogarambha.png.asset.json";
 import kasratshalaLogo from "@/assets/logo-kasratshala.png.asset.json";
 
 
 const HeroBackground = lazy(() => import("./HeroBackground"));
 
-const headline = ["WHY CHOOSE", "YOGARAMBHA ACADEMY", "FOR YOUR STUDIES?"];
+const headline = ["A LIVING LINEAGE", "OF BREATH, BODY", "AND STILLNESS"];
+
 
 export function Hero() {
   const rootRef = useRef<HTMLElement>(null);
