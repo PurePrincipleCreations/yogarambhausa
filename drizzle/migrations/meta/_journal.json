@@ -8,6 +8,13 @@
       "when": 1788581970509,
       "tag": "0000_create_mentorship_bookings",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788581991837,
+      "tag": "0001_restrict_mentorship_bookings_reads",
+      "breakpoints": true
     }
   ]
 }
