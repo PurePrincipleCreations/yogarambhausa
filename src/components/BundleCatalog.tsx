@@ -59,7 +59,7 @@ function CourseCard({ course }: { course: Course }) {
             src={`https://www.youtube.com/embed/${course.previewVideoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${course.previewVideoId}&modestbranding=1&playsinline=1&rel=0`}
             title={`${course.title} preview`}
             allow="autoplay; encrypted-media"
-            className="pointer-events-none absolute inset-0 h-full w-full scale-[1.35] border-0"
+            className="pointer-events-none absolute inset-0 h-full w-full scale-[1.6] border-0"
           />
         )}
         <button
