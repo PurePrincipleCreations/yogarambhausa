@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      mentorship_bookings: {
+        Row: {
+          created_at: string
+          email: string
+          email_status: string
+          ends_at: string
+          full_name: string
+          goals: string | null
+          id: string
+          meeting_url: string | null
+          phone: string | null
+          starts_at: string
+          status: string
+          timezone: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          email_status?: string
+          ends_at: string
+          full_name: string
+          goals?: string | null
+          id?: string
+          meeting_url?: string | null
+          phone?: string | null
+          starts_at: string
+          status?: string
+          timezone?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          email_status?: string
+          ends_at?: string
+          full_name?: string
+          goals?: string | null
+          id?: string
+          meeting_url?: string | null
+          phone?: string | null
+          starts_at?: string
+          status?: string
+          timezone?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
