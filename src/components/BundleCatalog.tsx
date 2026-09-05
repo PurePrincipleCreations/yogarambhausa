@@ -39,12 +39,13 @@ function CourseCard({ course }: { course: Course }) {
   };
 
   return (
-    <article className="course-card group flex min-h-[31rem] flex-col overflow-hidden rounded-3xl border border-border/60 bg-card shadow-[0_24px_65px_-35px_oklch(0.28_0.03_260/0.42)] transition-[box-shadow,transform] duration-500 hover:-translate-y-1 hover:shadow-[0_32px_80px_-34px_oklch(0.28_0.03_260/0.52)]">
-      <div
-        className="relative aspect-[3/2] overflow-hidden"
-        onMouseEnter={startPreview}
-        onMouseLeave={stopPreview}
-      >
+    <article
+      onMouseEnter={startPreview}
+      onMouseLeave={stopPreview}
+      className="course-card group flex min-h-[31rem] flex-col overflow-hidden rounded-3xl border border-border/60 bg-card shadow-[0_24px_65px_-35px_oklch(0.28_0.03_260/0.42)] transition-[box-shadow,transform] duration-500 hover:-translate-y-1 hover:shadow-[0_32px_80px_-34px_oklch(0.28_0.03_260/0.52)]"
+    >
+      <div className="relative aspect-[3/2] overflow-hidden">
+
         <img
           src={course.thumbnail}
           alt={`${course.title} course`}
