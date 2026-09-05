@@ -64,7 +64,12 @@ export function Hero() {
         </div>
 
 
-        <h1 className="font-display text-[2rem] leading-[1.06] font-semibold tracking-[-0.02em] text-slate-800 sm:text-5xl lg:text-6xl">
+
+        <p className="hero-sanskrit mb-6 text-[0.7rem] font-medium tracking-[0.34em] text-slate-800/45 uppercase sm:text-xs">
+          Yogaḥ karmasu kauśalam
+        </p>
+
+        <h1 className="font-display text-[2rem] leading-[1.06] font-normal tracking-[-0.02em] text-slate-800 sm:text-5xl lg:text-6xl">
           {headline.map((line) => (
             <span key={line} className="block overflow-hidden py-[0.12em]">
               <span className="hero-line-inner block">{line}</span>
@@ -72,20 +77,29 @@ export function Hero() {
           ))}
         </h1>
 
-        <p className="hero-sub mx-auto mt-7 max-w-2xl text-base leading-relaxed text-slate-800/70 sm:text-lg">
-          After years of research and exploration into the world of movement arts, yoga,
-          pranayama, teaching and philosophy, we were able to create the best way to learn
-          this wonderful, ancient art.
+        <p className="hero-sub mx-auto mt-7 max-w-xl text-base leading-relaxed text-slate-800/65 sm:text-lg">
+          Yogarambha carries an unbroken thread of Indian yoga and movement practice — breath,
+          body and philosophy taught slowly, precisely, and in small circles, the way it has
+          always been passed on.
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <button className="hero-cta rounded-full bg-ember px-7 py-3.5 text-sm font-semibold text-white shadow-[0_24px_50px_-20px_oklch(0.7_0.2_42/0.95)] transition-transform duration-200 hover:scale-[1.04]">
-            Explore Programs
-          </button>
-          <button className="hero-cta rounded-full border border-white/70 bg-white/60 px-7 py-3.5 text-sm font-semibold text-slate-800 backdrop-blur-md transition-transform duration-200 hover:scale-[1.04]">
-            Our Philosophy
-          </button>
+          <Link
+            to="/"
+            hash="programs"
+            className="hero-cta rounded-full bg-ember px-7 py-3.5 text-sm font-semibold text-white shadow-[0_24px_50px_-20px_oklch(0.7_0.2_42/0.95)] transition-transform duration-200 hover:scale-[1.04]"
+          >
+            Begin Your Practice
+          </Link>
+          <Link
+            to="/"
+            hash="philosophy"
+            className="hero-cta rounded-full border border-white/70 bg-white/60 px-7 py-3.5 text-sm font-semibold text-slate-800 backdrop-blur-md transition-transform duration-200 hover:scale-[1.04]"
+          >
+            The Tradition
+          </Link>
         </div>
+
       </div>
 
       <div
