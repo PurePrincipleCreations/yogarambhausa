@@ -1,5 +1,8 @@
 import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import yogarambhaLogo from "@/assets/logo-yogarambha.png.asset.json";
+import kasratshalaLogo from "@/assets/logo-kasratshala.png.asset.json";
+
 
 const HeroBackground = lazy(() => import("./HeroBackground"));
 
