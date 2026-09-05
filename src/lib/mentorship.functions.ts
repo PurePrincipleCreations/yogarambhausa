@@ -20,6 +20,7 @@ const bookingSchema = z.object({
   email: z.string().trim().email().max(200),
   phone: z.string().trim().max(40).optional().default(""),
   goals: z.string().trim().max(1200).optional().default(""),
+  journey: z.string().trim().min(10).max(2000),
   startsAt: z.string().datetime(),
   timezone: z.string().max(80).optional().default("Asia/Kolkata"),
 });
@@ -43,6 +44,7 @@ export const createBooking = createServerFn({ method: "POST" })
         email: data.email,
         phone: data.phone || null,
         goals: data.goals || null,
+        journey: data.journey,
         timezone: data.timezone,
         starts_at: start.toISOString(),
         ends_at: end.toISOString(),

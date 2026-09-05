@@ -23,6 +23,7 @@ export type Database = {
           full_name: string
           goals: string | null
           id: string
+          journey: string | null
           meeting_url: string | null
           phone: string | null
           starts_at: string
@@ -37,6 +38,7 @@ export type Database = {
           full_name: string
           goals?: string | null
           id?: string
+          journey?: string | null
           meeting_url?: string | null
           phone?: string | null
           starts_at: string
@@ -51,6 +53,7 @@ export type Database = {
           full_name?: string
           goals?: string | null
           id?: string
+          journey?: string | null
           meeting_url?: string | null
           phone?: string | null
           starts_at?: string
