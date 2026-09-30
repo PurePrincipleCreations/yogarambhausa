@@ -91,7 +91,7 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
       { user_id: userId, lesson_id: activeVideo.id, is_completed: !isComplete, updated_at: new Date().toISOString() },
       { onConflict: "user_id,lesson_id" },
     );
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     void qc.invalidateQueries({ queryKey: ["progress", userId, slug] });
   };
 

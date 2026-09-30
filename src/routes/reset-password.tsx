@@ -27,11 +27,11 @@ function ResetPasswordPage() {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const password = String(form.get("password"));
-    if (password !== String(form.get("confirm"))) return toast.error("Passwords do not match.");
+    if (password !== String(form.get("confirm"))) { toast.error("Passwords do not match."); return; }
     setBusy(true);
     const { error } = await supabase.auth.updateUser({ password });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Password saved. Welcome to Yogarambha.");
     void navigate({ to: "/" });
   };

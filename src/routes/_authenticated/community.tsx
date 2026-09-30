@@ -54,7 +54,7 @@ function CommunityPage() {
     const formEl = e.currentTarget;
     const f = new FormData(formEl);
     const videoUrl = String(f.get("video_url") ?? "").trim();
-    if (videoUrl && !/^https:\/\//.test(videoUrl)) return toast.error("Video link must start with https://");
+    if (videoUrl && !/^https:\/\//.test(videoUrl)) { toast.error("Video link must start with https://"); return; }
     const { error } = await supabase.from("community_posts").insert({
       user_id: user.id,
       author_name: user.name.slice(0, 80),
@@ -63,7 +63,7 @@ function CommunityPage() {
       video_url: videoUrl || null,
       tag,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     formEl.reset();
     toast.success("Posted to the community.");
     void qc.invalidateQueries({ queryKey: ["community-posts"] });
@@ -132,7 +132,7 @@ function PostCard({ post }: { post: Post }) {
     const { error } = await supabase.from("community_replies").insert({
       post_id: post.id, user_id: user.id, author_name: user.name.slice(0, 80), content: content.slice(0, 3000),
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     formEl.reset();
     void qc.invalidateQueries({ queryKey: ["community-posts"] });
   };

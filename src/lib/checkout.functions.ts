@@ -15,7 +15,7 @@ export const createCheckout = createServerFn({ method: "POST" })
     const origin = new URL(getRequest().url).origin;
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      customer_email: data.email,
+      ...(data.email ? { customer_email: data.email } : {}),
       line_items: [
         {
           quantity: 1,

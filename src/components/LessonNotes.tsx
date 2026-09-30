@@ -29,11 +29,11 @@ export function LessonNotes({ lessonId }: { lessonId: string }) {
     const content = String(f.get("content")).trim();
     const stamp = String(f.get("stamp")).trim();
     if (!content) return;
-    if (stamp && !/^\d{1,2}:\d{2}(:\d{2})?$/.test(stamp)) return toast.error("Use a time like 14:22");
+    if (stamp && !/^\d{1,2}:\d{2}(:\d{2})?$/.test(stamp)) { toast.error("Use a time like 14:22"); return; }
     const { error } = await supabase.from("notes").insert({
       user_id: userId, lesson_id: lessonId, content: content.slice(0, 2000), video_timestamp: stamp || null,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     formEl.reset();
     void qc.invalidateQueries({ queryKey: key });
   };

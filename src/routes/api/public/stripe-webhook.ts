@@ -22,7 +22,7 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
         if (event.type === "checkout.session.completed") {
           const session = event.data.object;
           const email = session.customer_details?.email ?? session.customer_email;
-          const slug = session.metadata?.course_slug;
+          const slug = session.metadata?.["course_slug"];
           if (!email || !slug || !courses.some((c) => c.slug === slug)) {
             return new Response("Missing data", { status: 200 });
           }
