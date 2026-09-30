@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { LogOut } from "lucide-react";
-import { useAuthStore } from "@/stores/useAuthStore";
+import { LayoutDashboard, LogOut, Users } from "lucide-react";
+import { isStaff, useAuthStore } from "@/stores/useAuthStore";
 import yogarambhaLogo from "@/assets/logo-yogarambha.png.asset.json";
 import kasratshalaLogo from "@/assets/logo-kasratshala.png.asset.json";
 
@@ -29,6 +29,7 @@ export function Navbar() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const openAuthModal = useAuthStore((state) => state.openAuthModal);
   const logout = useAuthStore((state) => state.logout);
+  const staff = useAuthStore((state) => isStaff(state.roles));
 
   useEffect(() => {
     if (!navRef.current) return;
@@ -112,7 +113,16 @@ export function Navbar() {
                   <span className="block truncate text-xs font-normal text-muted-foreground">{user?.email}</span>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={logout} className="rounded-lg py-2.5">
+                <DropdownMenuItem asChild className="rounded-lg py-2.5">
+                  <Link to="/community"><Users aria-hidden="true" /> Community</Link>
+                </DropdownMenuItem>
+                {staff && (
+                  <DropdownMenuItem asChild className="rounded-lg py-2.5">
+                    <Link to="/manage"><LayoutDashboard aria-hidden="true" /> Manage students</Link>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => void logout()} className="rounded-lg py-2.5">
                   <LogOut aria-hidden="true" /> Sign Out
                 </DropdownMenuItem>
               </DropdownMenuContent>
