@@ -91,7 +91,7 @@ export function LiveTTCPage() {
                   {isAuthenticated ? (
                     <Button asChild className="h-11 rounded-full bg-ember px-5 text-primary-foreground transition-all duration-300 hover:bg-ember/90"><a href={session.streamUrl} target="_blank" rel="noreferrer"><Video aria-hidden="true" />Join Live Stream</a></Button>
                   ) : (
-                    <Button type="button" variant="secondary" onClick={openAuthModal} className="h-11 rounded-full px-5 text-secondary-foreground transition-all duration-300"><LockKeyhole aria-hidden="true" />Sign in to Join</Button>
+                    <Button type="button" variant="secondary" onClick={() => openAuthModal()} className="h-11 rounded-full px-5 text-secondary-foreground transition-all duration-300"><LockKeyhole aria-hidden="true" />Sign in to Join</Button>
                   )}
                 </article>
               );

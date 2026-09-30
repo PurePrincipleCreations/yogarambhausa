@@ -120,14 +120,14 @@ export function Navbar() {
           ) : (
             <Button
               variant="ghost"
-              onClick={openAuthModal}
+              onClick={() => openAuthModal()}
               className="rounded-full px-4 text-sm font-medium text-slate-800 hover:bg-white/70"
             >
               Log In
             </Button>
           )}
           {!isAuthenticated && (
-            <Button onClick={openAuthModal} className="rounded-full bg-ember px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_16px_35px_-14px_oklch(0.7_0.2_42/0.95)] transition-all duration-300 hover:bg-ember/90">
+            <Button onClick={() => openAuthModal("signup")} className="rounded-full bg-ember px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_16px_35px_-14px_oklch(0.7_0.2_42/0.95)] transition-all duration-300 hover:bg-ember/90">
               Sign Up
             </Button>
           )}

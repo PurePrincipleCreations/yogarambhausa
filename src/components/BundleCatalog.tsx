@@ -109,7 +109,7 @@ function CourseCard({ course }: { course: Course }) {
               </Link>
             </Button>
           ) : (
-            <Button type="button" onClick={openAuthModal} className="h-11 rounded-full bg-ember px-5 text-primary-foreground transition-all duration-300 hover:bg-ember/90">
+            <Button type="button" onClick={() => openAuthModal()} className="h-11 rounded-full bg-ember px-5 text-primary-foreground transition-all duration-300 hover:bg-ember/90">
               <LockKeyhole aria-hidden="true" /> Sign in to Unlock
             </Button>
           )}
