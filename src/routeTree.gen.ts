@@ -19,6 +19,7 @@ import { Route as RetreatsRouteImport } from './routes/retreats'
 import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated/community'
 import { Route as AuthenticatedManageRouteImport } from './routes/_authenticated/manage'
 import { Route as AuthenticatedMentoringRouteImport } from './routes/_authenticated/mentoring'
+import { Route as AuthenticatedMyCoursesRouteImport } from './routes/_authenticated/my-courses'
 import { Route as CoursesSlugRouteImport } from './routes/courses.$slug'
 import { Route as LegalDocumentRouteImport } from './routes/legal.$document'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
@@ -72,6 +73,11 @@ const AuthenticatedMentoringRoute = AuthenticatedMentoringRouteImport.update({
   path: '/mentoring',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMyCoursesRoute = AuthenticatedMyCoursesRouteImport.update({
+  id: '/my-courses',
+  path: '/my-courses',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const CoursesSlugRoute = CoursesSlugRouteImport.update({
   id: '/courses/$slug',
   path: '/courses/$slug',
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/community': typeof AuthenticatedCommunityRoute
   '/manage': typeof AuthenticatedManageRoute
   '/mentoring': typeof AuthenticatedMentoringRoute
+  '/my-courses': typeof AuthenticatedMyCoursesRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
@@ -112,6 +119,7 @@ export interface FileRoutesByTo {
   '/community': typeof AuthenticatedCommunityRoute
   '/manage': typeof AuthenticatedManageRoute
   '/mentoring': typeof AuthenticatedMentoringRoute
+  '/my-courses': typeof AuthenticatedMyCoursesRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
@@ -128,6 +136,7 @@ export interface FileRoutesById {
   '/_authenticated/community': typeof AuthenticatedCommunityRoute
   '/_authenticated/manage': typeof AuthenticatedManageRoute
   '/_authenticated/mentoring': typeof AuthenticatedMentoringRoute
+  '/_authenticated/my-courses': typeof AuthenticatedMyCoursesRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/community'
     | '/manage'
     | '/mentoring'
+    | '/my-courses'
     | '/courses/$slug'
     | '/legal/$document'
     | '/api/public/stripe-webhook'
@@ -158,6 +168,7 @@ export interface FileRouteTypes {
     | '/community'
     | '/manage'
     | '/mentoring'
+    | '/my-courses'
     | '/courses/$slug'
     | '/legal/$document'
     | '/api/public/stripe-webhook'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/_authenticated/community'
     | '/_authenticated/manage'
     | '/_authenticated/mentoring'
+    | '/_authenticated/my-courses'
     | '/courses/$slug'
     | '/legal/$document'
     | '/api/public/stripe-webhook'
@@ -263,6 +275,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMentoringRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/my-courses': {
+      id: '/_authenticated/my-courses'
+      path: '/my-courses'
+      fullPath: '/my-courses'
+      preLoaderRoute: typeof AuthenticatedMyCoursesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/courses/$slug': {
       id: '/courses/$slug'
       path: '/courses/$slug'
@@ -291,12 +310,14 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
   AuthenticatedManageRoute: typeof AuthenticatedManageRoute
   AuthenticatedMentoringRoute: typeof AuthenticatedMentoringRoute
+  AuthenticatedMyCoursesRoute: typeof AuthenticatedMyCoursesRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
   AuthenticatedManageRoute: AuthenticatedManageRoute,
   AuthenticatedMentoringRoute: AuthenticatedMentoringRoute,
+  AuthenticatedMyCoursesRoute: AuthenticatedMyCoursesRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
