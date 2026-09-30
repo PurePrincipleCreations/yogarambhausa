@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Clock } from "lucide-react";
 import { formatStamp } from "@/components/player/VideoStage";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -12,6 +12,11 @@ import { Textarea } from "@/components/ui/textarea";
 export function LessonNotes({ lessonId, getCurrentTime }: { lessonId: string; getCurrentTime?: () => number }) {
   const [stamp, setStamp] = useState<string | null>(null);
   const area = useRef<HTMLTextAreaElement>(null);
+  const [now, setNow] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setNow(getCurrentTime?.() ?? 0), 1000);
+    return () => clearInterval(t);
+  }, [getCurrentTime]);
   const addStamp = () => {
     const t = formatStamp(getCurrentTime?.() ?? 0);
     setStamp(t);
@@ -70,7 +75,7 @@ export function LessonNotes({ lessonId, getCurrentTime }: { lessonId: string; ge
         <Textarea ref={area} name="content" required maxLength={2000} rows={3} placeholder="Write what you noticed in this lesson…" className="rounded-2xl border-border/60 bg-muted/60" />
         <div className="flex flex-wrap gap-2">
           <Button type="button" variant="outline" onClick={addStamp} className="h-10 rounded-full">
-            <Clock aria-hidden="true" /> Add {formatStamp(getCurrentTime?.() ?? 0)}
+            <Clock aria-hidden="true" /> Add {formatStamp(now)}
           </Button>
           <Button type="submit" className="h-10 rounded-full bg-ember px-5 text-primary-foreground hover:bg-ember/90">Save note</Button>
         </div>
