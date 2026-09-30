@@ -15,6 +15,7 @@ import { Route as MentorshipRouteImport } from './routes/mentorship'
 import { Route as RetreatsRouteImport } from './routes/retreats'
 import { Route as CoursesSlugRouteImport } from './routes/courses.$slug'
 import { Route as LegalDocumentRouteImport } from './routes/legal.$document'
+import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +47,11 @@ const LegalDocumentRoute = LegalDocumentRouteImport.update({
   path: '/legal/$document',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
+  id: '/api/public/stripe-webhook',
+  path: '/api/public/stripe-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/retreats': typeof RetreatsRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/retreats': typeof RetreatsRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/retreats': typeof RetreatsRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/retreats'
     | '/courses/$slug'
     | '/legal/$document'
+    | '/api/public/stripe-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/retreats'
     | '/courses/$slug'
     | '/legal/$document'
+    | '/api/public/stripe-webhook'
   id:
     | '__root__'
     | '/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/retreats'
     | '/courses/$slug'
     | '/legal/$document'
+    | '/api/public/stripe-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +118,7 @@ export interface RootRouteChildren {
   RetreatsRoute: typeof RetreatsRoute
   CoursesSlugRoute: typeof CoursesSlugRoute
   LegalDocumentRoute: typeof LegalDocumentRoute
+  ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -152,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LegalDocumentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/stripe-webhook': {
+      id: '/api/public/stripe-webhook'
+      path: '/api/public/stripe-webhook'
+      fullPath: '/api/public/stripe-webhook'
+      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -162,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   RetreatsRoute: RetreatsRoute,
   CoursesSlugRoute: CoursesSlugRoute,
   LegalDocumentRoute: LegalDocumentRoute,
+  ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
