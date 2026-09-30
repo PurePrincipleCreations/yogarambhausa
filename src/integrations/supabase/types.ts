@@ -124,9 +124,11 @@ export type Database = {
           journey: string | null
           meeting_url: string | null
           phone: string | null
+          session_type: string
           starts_at: string
           status: string
           timezone: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -139,9 +141,11 @@ export type Database = {
           journey?: string | null
           meeting_url?: string | null
           phone?: string | null
+          session_type?: string
           starts_at: string
           status?: string
           timezone?: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -154,9 +158,11 @@ export type Database = {
           journey?: string | null
           meeting_url?: string | null
           phone?: string | null
+          session_type?: string
           starts_at?: string
           status?: string
           timezone?: string
+          user_id?: string | null
         }
         Relationships: []
       }
