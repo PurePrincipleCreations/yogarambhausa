@@ -1,14 +1,28 @@
-import { type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Clock } from "lucide-react";
+import { formatStamp } from "@/components/player/VideoStage";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-export function LessonNotes({ lessonId }: { lessonId: string }) {
+export function LessonNotes({ lessonId, getCurrentTime }: { lessonId: string; getCurrentTime?: () => number }) {
+  const [stamp, setStamp] = useState<string | null>(null);
+  const area = useRef<HTMLTextAreaElement>(null);
+  const [now, setNow] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setNow(getCurrentTime?.() ?? 0), 1000);
+    return () => clearInterval(t);
+  }, [getCurrentTime]);
+  const addStamp = () => {
+    const t = formatStamp(getCurrentTime?.() ?? 0);
+    setStamp(t);
+    const el = area.current;
+    if (el && !el.value.startsWith(`[${t}]`)) { el.value = `[${t}] ${el.value.replace(/^\[[\d:]+\]\s*/, "")}`; el.focus(); }
+  };
   const userId = useAuthStore((s) => s.user?.id);
   const qc = useQueryClient();
   const key = ["notes", userId, lessonId];
@@ -26,15 +40,14 @@ export function LessonNotes({ lessonId }: { lessonId: string }) {
     if (!userId) return;
     const formEl = e.currentTarget;
     const f = new FormData(formEl);
-    const content = String(f.get("content")).trim();
-    const stamp = String(f.get("stamp")).trim();
+    const content = String(f.get("content")).replace(/^\[[\d:]+\]\s*/, "").trim();
     if (!content) return;
-    if (stamp && !/^\d{1,2}:\d{2}(:\d{2})?$/.test(stamp)) { toast.error("Use a time like 14:22"); return; }
     const { error } = await supabase.from("notes").insert({
-      user_id: userId, lesson_id: lessonId, content: content.slice(0, 2000), video_timestamp: stamp || null,
+      user_id: userId, lesson_id: lessonId, content: content.slice(0, 2000), video_timestamp: stamp,
     });
     if (error) { toast.error(error.message); return; }
     formEl.reset();
+    setStamp(null);
     void qc.invalidateQueries({ queryKey: key });
   };
 
@@ -45,7 +58,7 @@ export function LessonNotes({ lessonId }: { lessonId: string }) {
 
   return (
     <section className="rounded-3xl border border-border/70 bg-card/80 p-6 shadow-lg">
-      <h2 className="text-lg font-semibold text-card-foreground">Your notes</h2>
+      <h2 className="text-lg font-semibold text-card-foreground">My Notes</h2>
       <ul className="mt-4 space-y-2">
         {notes.length === 0 && <li className="text-sm text-muted-foreground">No notes for this lesson yet.</li>}
         {notes.map((n) => (
@@ -58,10 +71,14 @@ export function LessonNotes({ lessonId }: { lessonId: string }) {
           </li>
         ))}
       </ul>
-      <form onSubmit={add} className="mt-4 flex flex-col gap-2 sm:flex-row">
-        <Input name="stamp" placeholder="14:22" maxLength={8} className="h-11 rounded-xl sm:w-24" />
-        <Textarea name="content" required maxLength={2000} rows={1} placeholder="Add a note…" className="min-h-11 flex-1 rounded-xl" />
-        <Button type="submit" className="h-11 rounded-full bg-ember px-5 text-primary-foreground hover:bg-ember/90">Save</Button>
+      <form onSubmit={add} className="mt-4 space-y-3">
+        <Textarea ref={area} name="content" required maxLength={2000} rows={3} placeholder="Write what you noticed in this lesson…" className="rounded-2xl border-border/60 bg-muted/60" />
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" variant="outline" onClick={addStamp} className="h-10 rounded-full">
+            <Clock aria-hidden="true" /> Add {formatStamp(now)}
+          </Button>
+          <Button type="submit" className="h-10 rounded-full bg-ember px-5 text-primary-foreground hover:bg-ember/90">Save note</Button>
+        </div>
       </form>
     </section>
   );

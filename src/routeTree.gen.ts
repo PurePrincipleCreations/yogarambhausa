@@ -18,6 +18,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RetreatsRouteImport } from './routes/retreats'
 import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated/community'
 import { Route as AuthenticatedManageRouteImport } from './routes/_authenticated/manage'
+import { Route as AuthenticatedMentoringRouteImport } from './routes/_authenticated/mentoring'
 import { Route as CoursesSlugRouteImport } from './routes/courses.$slug'
 import { Route as LegalDocumentRouteImport } from './routes/legal.$document'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
@@ -66,6 +67,11 @@ const AuthenticatedManageRoute = AuthenticatedManageRouteImport.update({
   path: '/manage',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMentoringRoute = AuthenticatedMentoringRouteImport.update({
+  id: '/mentoring',
+  path: '/mentoring',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const CoursesSlugRoute = CoursesSlugRouteImport.update({
   id: '/courses/$slug',
   path: '/courses/$slug',
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/retreats': typeof RetreatsRoute
   '/community': typeof AuthenticatedCommunityRoute
   '/manage': typeof AuthenticatedManageRoute
+  '/mentoring': typeof AuthenticatedMentoringRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/retreats': typeof RetreatsRoute
   '/community': typeof AuthenticatedCommunityRoute
   '/manage': typeof AuthenticatedManageRoute
+  '/mentoring': typeof AuthenticatedMentoringRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/retreats': typeof RetreatsRoute
   '/_authenticated/community': typeof AuthenticatedCommunityRoute
   '/_authenticated/manage': typeof AuthenticatedManageRoute
+  '/_authenticated/mentoring': typeof AuthenticatedMentoringRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/retreats'
     | '/community'
     | '/manage'
+    | '/mentoring'
     | '/courses/$slug'
     | '/legal/$document'
     | '/api/public/stripe-webhook'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/retreats'
     | '/community'
     | '/manage'
+    | '/mentoring'
     | '/courses/$slug'
     | '/legal/$document'
     | '/api/public/stripe-webhook'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/retreats'
     | '/_authenticated/community'
     | '/_authenticated/manage'
+    | '/_authenticated/mentoring'
     | '/courses/$slug'
     | '/legal/$document'
     | '/api/public/stripe-webhook'
@@ -244,6 +256,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedManageRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/mentoring': {
+      id: '/_authenticated/mentoring'
+      path: '/mentoring'
+      fullPath: '/mentoring'
+      preLoaderRoute: typeof AuthenticatedMentoringRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/courses/$slug': {
       id: '/courses/$slug'
       path: '/courses/$slug'
@@ -271,11 +290,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
   AuthenticatedManageRoute: typeof AuthenticatedManageRoute
+  AuthenticatedMentoringRoute: typeof AuthenticatedMentoringRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
   AuthenticatedManageRoute: AuthenticatedManageRoute,
+  AuthenticatedMentoringRoute: AuthenticatedMentoringRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

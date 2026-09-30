@@ -7,9 +7,41 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useOwnsCourse } from "@/hooks/useCourseAccess";
 import { LessonNotes } from "@/components/LessonNotes";
+import { VideoStage, type VideoStageHandle } from "@/components/player/VideoStage";
 import { courses } from "@/data/courses";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/useAuthStore";
+
+function LessonStatus({ done, pct, locked }: { done: boolean; pct: number; locked: boolean }) {
+  if (locked) {
+    return (
+      <span className="grid size-9 shrink-0 place-items-center rounded-full bg-muted text-muted-foreground">
+        <LockKeyhole className="size-3.5" aria-label="Locked" />
+      </span>
+    );
+  }
+  if (done) {
+    return (
+      <span className="grid size-9 shrink-0 place-items-center rounded-full bg-ember text-primary-foreground">
+        <Check className="size-4" strokeWidth={3} aria-label="Completed" />
+      </span>
+    );
+  }
+  const r = 15;
+  const c = 2 * Math.PI * r;
+  return (
+    <span className="relative grid size-9 shrink-0 place-items-center" aria-label={pct ? `${pct}% watched` : "Not started"}>
+      <svg viewBox="0 0 36 36" className="absolute inset-0 size-9 -rotate-90">
+        <circle cx="18" cy="18" r={r} fill="none" strokeWidth="2.5" className="stroke-muted-foreground/30" />
+        {pct > 0 && (
+          <circle cx="18" cy="18" r={r} fill="none" strokeWidth="2.5" strokeLinecap="round"
+            strokeDasharray={c} strokeDashoffset={c * (1 - pct / 100)} className="stroke-ember" />
+        )}
+      </svg>
+      {pct > 0 && <span className="text-[0.6rem] font-semibold text-foreground">{pct}%</span>}
+    </span>
+  );
+}
 
 export function CoursePlayerPage({ slug }: { slug: string }) {
   const root = useRef<HTMLElement>(null);
@@ -19,16 +51,21 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
   const userId = useAuthStore((state) => state.user?.id);
   const owns = useOwnsCourse(slug);
   const qc = useQueryClient();
-  const { data: completedIds = [] } = useQuery({
+  const stage = useRef<VideoStageHandle>(null);
+  const { data: progressRows = [] } = useQuery({
     queryKey: ["progress", userId, slug],
     enabled: !!userId && !!course,
     queryFn: async () => {
       const ids = course!.videos.map((v) => v.id);
-      const { data } = await supabase.from("video_progress").select("lesson_id").eq("is_completed", true).in("lesson_id", ids);
-      return (data ?? []).map((r) => r.lesson_id);
+      const { data } = await supabase
+        .from("video_progress")
+        .select("lesson_id, watched_seconds, total_seconds, is_completed")
+        .in("lesson_id", ids);
+      return data ?? [];
     },
   });
-  const completed = new Set(completedIds);
+  const progressMap = new Map(progressRows.map((r) => [r.lesson_id, r]));
+  const completed = new Set(progressRows.filter((r) => r.is_completed).map((r) => r.lesson_id));
   const openAuthModal = useAuthStore((state) => state.openAuthModal);
 
   useLayoutEffect(() => {
@@ -119,13 +156,14 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
                 </div>
               </div>
             ) : (
-            <iframe
+            <VideoStage
               key={activeVideo.id}
-              src={`${activeVideo.videoUrl}?rel=0&modestbranding=1`}
+              ref={stage}
+              videoUrl={activeVideo.videoUrl}
+              lessonId={activeVideo.id}
+              userId={userId}
               title={`${course.title}: ${activeVideo.title}`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="size-full border-0"
+              onProgress={() => void qc.invalidateQueries({ queryKey: ["progress", userId, slug] })}
             />
             )}
           </div>
@@ -169,7 +207,7 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
               </Button>
             </div>
           </div>
-          {!locked && <LessonNotes lessonId={activeVideo.id} />}
+          {!locked && <LessonNotes lessonId={activeVideo.id} getCurrentTime={() => stage.current?.getCurrentTime() ?? 0} />}
         </section>
 
         <aside className="player-playlist min-h-[34rem] overflow-hidden rounded-3xl border border-border/70 bg-card/80 p-4 shadow-lg backdrop-blur-xl sm:p-6 lg:col-span-4 lg:h-full xl:col-span-3">
@@ -191,7 +229,9 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
             <ol className="hide-scrollbar mt-4 flex-1 space-y-2 overflow-y-auto pr-1">
               {course.videos.map((video, index) => {
                 const active = index === activeVideoIndex;
-                const done = completed.has(video.id);
+                const row = progressMap.get(video.id);
+                const done = !!row?.is_completed;
+                const pct = row && row.total_seconds > 0 ? Math.min(99, Math.round((row.watched_seconds / row.total_seconds) * 100)) : 0;
                 return (
                   <li key={video.id} className="playlist-item">
                     <button
@@ -200,9 +240,7 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
                       aria-current={active ? "true" : undefined}
                       className={`group flex w-full items-center gap-3 rounded-2xl p-3.5 text-left transition-all duration-300 hover:scale-[1.02] ${active ? "bg-ember/10 text-ember" : "bg-transparent text-foreground hover:bg-muted"}`}
                     >
-                      <span className={`grid size-9 shrink-0 place-items-center rounded-full text-xs font-semibold ${active ? "bg-ember text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
-                        {done ? <Check className="size-4" aria-hidden="true" /> : isLocked(index) ? <LockKeyhole className="size-3.5" aria-hidden="true" /> : String(index + 1).padStart(2, "0")}
-                      </span>
+                      <LessonStatus done={done} pct={pct} locked={isLocked(index)} />
                       <span className="min-w-0 flex-1">
                         <span className={`block truncate text-sm ${active ? "font-bold" : "font-medium"}`}>{video.title}</span>
                         <span className="mt-1 block text-xs text-muted-foreground">{video.duration}</span>

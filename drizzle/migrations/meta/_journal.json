@@ -29,6 +29,13 @@
       "when": 1790757988360,
       "tag": "0003_lms_roles_enrollments_community",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790758348882,
+      "tag": "0004_student_mentoring_sessions",
+      "breakpoints": true
     }
   ]
 }

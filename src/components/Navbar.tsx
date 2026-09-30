@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { LayoutDashboard, LogOut, Users } from "lucide-react";
+import { CalendarHeart, LayoutDashboard, LogOut, Users } from "lucide-react";
 import { isStaff, useAuthStore } from "@/stores/useAuthStore";
 import yogarambhaLogo from "@/assets/logo-yogarambha.png.asset.json";
 import kasratshalaLogo from "@/assets/logo-kasratshala.png.asset.json";
@@ -115,6 +115,9 @@ export function Navbar() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild className="rounded-lg py-2.5">
                   <Link to="/community"><Users aria-hidden="true" /> Community</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild className="rounded-lg py-2.5">
+                  <Link to="/mentoring"><CalendarHeart aria-hidden="true" /> Mentoring with Veer</Link>
                 </DropdownMenuItem>
                 {staff && (
                   <DropdownMenuItem asChild className="rounded-lg py-2.5">
