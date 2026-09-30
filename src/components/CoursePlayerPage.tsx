@@ -1,7 +1,12 @@
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import gsap from "gsap";
-import { Check, CheckCircle2, ChevronLeft, SkipBack, SkipForward } from "lucide-react";
+import { Check, CheckCircle2, ChevronLeft, LockKeyhole, SkipBack, SkipForward } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useOwnsCourse } from "@/hooks/useCourseAccess";
+import { LessonNotes } from "@/components/LessonNotes";
 import { courses } from "@/data/courses";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -10,8 +15,20 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
   const root = useRef<HTMLElement>(null);
   const course = useMemo(() => courses.find((item) => item.slug === slug), [slug]);
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
-  const [completed, setCompleted] = useState<Set<string>>(() => new Set());
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const userId = useAuthStore((state) => state.user?.id);
+  const owns = useOwnsCourse(slug);
+  const qc = useQueryClient();
+  const { data: completedIds = [] } = useQuery({
+    queryKey: ["progress", userId, slug],
+    enabled: !!userId && !!course,
+    queryFn: async () => {
+      const ids = course!.videos.map((v) => v.id);
+      const { data } = await supabase.from("video_progress").select("lesson_id").eq("is_completed", true).in("lesson_id", ids);
+      return (data ?? []).map((r) => r.lesson_id);
+    },
+  });
+  const completed = new Set(completedIds);
   const openAuthModal = useAuthStore((state) => state.openAuthModal);
 
   useLayoutEffect(() => {
@@ -50,7 +67,7 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
           <h1 className="mt-4 text-4xl font-bold text-foreground sm:text-5xl">Enter the {course.title} theater.</h1>
           <p className="mt-5 leading-relaxed text-muted-foreground">Sign in to unlock the complete curriculum, lesson progress, and focused video player.</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button type="button" onClick={openAuthModal} className="h-11 rounded-full bg-ember px-6 text-primary-foreground transition-all duration-300 hover:bg-ember/90">Sign in to Continue</Button>
+            <Button type="button" onClick={() => openAuthModal()} className="h-11 rounded-full bg-ember px-6 text-primary-foreground transition-all duration-300 hover:bg-ember/90">Sign in to Continue</Button>
             <Button asChild variant="outline" className="h-11 rounded-full px-6"><Link to="/">Return to programs</Link></Button>
           </div>
         </div>
@@ -65,17 +82,21 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
   const isComplete = completed.has(activeVideo.id);
   const isLastLesson = activeVideoIndex === course.videos.length - 1;
 
-  const toggleComplete = () => {
-    setCompleted((current) => {
-      const next = new Set(current);
-      if (next.has(activeVideo.id)) next.delete(activeVideo.id);
-      else next.add(activeVideo.id);
-      return next;
-    });
+  const isLocked = (index: number) => !owns && index >= 2;
+  const locked = isLocked(activeVideoIndex);
+
+  const toggleComplete = async () => {
+    if (!userId) return;
+    const { error } = await supabase.from("video_progress").upsert(
+      { user_id: userId, lesson_id: activeVideo.id, is_completed: !isComplete, updated_at: new Date().toISOString() },
+      { onConflict: "user_id,lesson_id" },
+    );
+    if (error) { toast.error(error.message); return; }
+    void qc.invalidateQueries({ queryKey: ["progress", userId, slug] });
   };
 
   return (
-    <main ref={root} className="min-h-screen bg-muted pt-28 font-sans lg:h-screen lg:overflow-hidden">
+    <main ref={root} className="min-h-screen bg-muted pt-28 font-sans">
       <div className="mx-auto grid min-h-[calc(100vh-7rem)] max-w-[100rem] grid-cols-1 gap-8 px-5 pb-8 sm:px-8 lg:grid-cols-12">
         <section className="player-stage flex min-w-0 flex-col lg:col-span-8 xl:col-span-9">
           <Link
@@ -86,6 +107,18 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
           </Link>
 
           <div className="aspect-video w-full overflow-hidden rounded-[2rem] bg-card shadow-2xl">
+            {locked ? (
+              <div className="grid size-full place-items-center bg-foreground p-8 text-center">
+                <div>
+                  <LockKeyhole className="mx-auto size-8 text-ember" aria-hidden="true" />
+                  <p className="mt-4 text-2xl font-semibold text-background">This lesson is part of the full program</p>
+                  <p className="mt-2 text-sm text-background/70">The first two lessons are free. Purchase {course.title} to unlock everything.</p>
+                  <Button asChild className="mt-6 rounded-full bg-ember text-primary-foreground hover:bg-ember/90">
+                    <Link to="/" hash="programs">View pricing</Link>
+                  </Button>
+                </div>
+              </div>
+            ) : (
             <iframe
               key={activeVideo.id}
               src={`${activeVideo.videoUrl}?rel=0&modestbranding=1`}
@@ -94,6 +127,7 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
               allowFullScreen
               className="size-full border-0"
             />
+            )}
           </div>
 
           <div className="flex flex-col gap-6 py-7 sm:flex-row sm:items-end sm:justify-between">
@@ -118,7 +152,8 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
               <Button
                 type="button"
                 variant="outline"
-                onClick={toggleComplete}
+                disabled={locked}
+                onClick={() => void toggleComplete()}
                 className="h-11 rounded-full px-5"
               >
                 {isComplete ? <Check aria-hidden="true" /> : <CheckCircle2 aria-hidden="true" />}
@@ -134,6 +169,7 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
               </Button>
             </div>
           </div>
+          {!locked && <LessonNotes lessonId={activeVideo.id} />}
         </section>
 
         <aside className="player-playlist min-h-[34rem] overflow-hidden rounded-3xl border border-border/70 bg-card/80 p-4 shadow-lg backdrop-blur-xl sm:p-6 lg:col-span-4 lg:h-full xl:col-span-3">
@@ -165,7 +201,7 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
                       className={`group flex w-full items-center gap-3 rounded-2xl p-3.5 text-left transition-all duration-300 hover:scale-[1.02] ${active ? "bg-ember/10 text-ember" : "bg-transparent text-foreground hover:bg-muted"}`}
                     >
                       <span className={`grid size-9 shrink-0 place-items-center rounded-full text-xs font-semibold ${active ? "bg-ember text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
-                        {done ? <Check className="size-4" aria-hidden="true" /> : String(index + 1).padStart(2, "0")}
+                        {done ? <Check className="size-4" aria-hidden="true" /> : isLocked(index) ? <LockKeyhole className="size-3.5" aria-hidden="true" /> : String(index + 1).padStart(2, "0")}
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className={`block truncate text-sm ${active ? "font-bold" : "font-medium"}`}>{video.title}</span>

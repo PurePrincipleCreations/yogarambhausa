@@ -6,6 +6,10 @@ import { courses, type Course } from "@/data/courses";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+import { useOwnsCourse } from "@/hooks/useCourseAccess";
+import { createCheckout } from "@/lib/checkout.functions";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,6 +18,20 @@ const filters = ["All", "Yoga", "Movement Mechanics", "Flow"];
 function CourseCard({ course }: { course: Course }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const openAuthModal = useAuthStore((state) => state.openAuthModal);
+  const email = useAuthStore((state) => state.user?.email);
+  const owns = useOwnsCourse(course.slug);
+  const checkout = useServerFn(createCheckout);
+  const [buying, setBuying] = useState(false);
+  const buy = async () => {
+    setBuying(true);
+    try {
+      const { url } = await checkout({ data: { slug: course.slug, email: email || undefined } });
+      window.location.href = url;
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Checkout is unavailable right now.");
+      setBuying(false);
+    }
+  };
   const [isPreviewing, setIsPreviewing] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -102,14 +120,18 @@ function CourseCard({ course }: { course: Course }) {
               Sign in to view pricing
             </span>
           )}
-          {isAuthenticated ? (
+          {owns ? (
             <Button asChild variant="outline" className="h-11 rounded-full px-5">
               <Link to="/courses/$slug" params={{ slug: course.slug }}>
-                View Curriculum <ArrowUpRight aria-hidden="true" />
+                Open Program <ArrowUpRight aria-hidden="true" />
               </Link>
             </Button>
+          ) : isAuthenticated ? (
+            <Button type="button" disabled={buying} onClick={() => void buy()} className="h-11 rounded-full bg-ember px-5 text-primary-foreground transition-all duration-300 hover:bg-ember/90">
+              {buying ? "Opening…" : "Buy Now"} <ArrowUpRight aria-hidden="true" />
+            </Button>
           ) : (
-            <Button type="button" onClick={openAuthModal} className="h-11 rounded-full bg-ember px-5 text-primary-foreground transition-all duration-300 hover:bg-ember/90">
+            <Button type="button" onClick={() => openAuthModal()} className="h-11 rounded-full bg-ember px-5 text-primary-foreground transition-all duration-300 hover:bg-ember/90">
               <LockKeyhole aria-hidden="true" /> Sign in to Unlock
             </Button>
           )}

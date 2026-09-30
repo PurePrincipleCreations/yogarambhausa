@@ -10,15 +10,30 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as LiveTtcRouteImport } from './routes/live-ttc'
 import { Route as MentorshipRouteImport } from './routes/mentorship'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RetreatsRouteImport } from './routes/retreats'
+import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated/community'
+import { Route as AuthenticatedManageRouteImport } from './routes/_authenticated/manage'
 import { Route as CoursesSlugRouteImport } from './routes/courses.$slug'
 import { Route as LegalDocumentRouteImport } from './routes/legal.$document'
+import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LiveTtcRoute = LiveTtcRouteImport.update({
@@ -31,10 +46,25 @@ const MentorshipRoute = MentorshipRouteImport.update({
   path: '/mentorship',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RetreatsRoute = RetreatsRouteImport.update({
   id: '/retreats',
   path: '/retreats',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedCommunityRoute = AuthenticatedCommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedManageRoute = AuthenticatedManageRouteImport.update({
+  id: '/manage',
+  path: '/manage',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const CoursesSlugRoute = CoursesSlugRouteImport.update({
   id: '/courses/$slug',
@@ -46,66 +76,107 @@ const LegalDocumentRoute = LegalDocumentRouteImport.update({
   path: '/legal/$document',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
+  id: '/api/public/stripe-webhook',
+  path: '/api/public/stripe-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/live-ttc': typeof LiveTtcRoute
   '/mentorship': typeof MentorshipRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/retreats': typeof RetreatsRoute
+  '/community': typeof AuthenticatedCommunityRoute
+  '/manage': typeof AuthenticatedManageRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/live-ttc': typeof LiveTtcRoute
   '/mentorship': typeof MentorshipRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/retreats': typeof RetreatsRoute
+  '/community': typeof AuthenticatedCommunityRoute
+  '/manage': typeof AuthenticatedManageRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/live-ttc': typeof LiveTtcRoute
   '/mentorship': typeof MentorshipRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/retreats': typeof RetreatsRoute
+  '/_authenticated/community': typeof AuthenticatedCommunityRoute
+  '/_authenticated/manage': typeof AuthenticatedManageRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/legal/$document': typeof LegalDocumentRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/live-ttc'
     | '/mentorship'
+    | '/reset-password'
     | '/retreats'
+    | '/community'
+    | '/manage'
     | '/courses/$slug'
     | '/legal/$document'
+    | '/api/public/stripe-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/live-ttc'
     | '/mentorship'
+    | '/reset-password'
     | '/retreats'
+    | '/community'
+    | '/manage'
     | '/courses/$slug'
     | '/legal/$document'
+    | '/api/public/stripe-webhook'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
+    | '/auth'
     | '/live-ttc'
     | '/mentorship'
+    | '/reset-password'
     | '/retreats'
+    | '/_authenticated/community'
+    | '/_authenticated/manage'
     | '/courses/$slug'
     | '/legal/$document'
+    | '/api/public/stripe-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   LiveTtcRoute: typeof LiveTtcRoute
   MentorshipRoute: typeof MentorshipRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   RetreatsRoute: typeof RetreatsRoute
   CoursesSlugRoute: typeof CoursesSlugRoute
   LegalDocumentRoute: typeof LegalDocumentRoute
+  ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -115,6 +186,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/live-ttc': {
@@ -131,12 +216,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MentorshipRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/retreats': {
       id: '/retreats'
       path: '/retreats'
       fullPath: '/retreats'
       preLoaderRoute: typeof RetreatsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/community': {
+      id: '/_authenticated/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof AuthenticatedCommunityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/manage': {
+      id: '/_authenticated/manage'
+      path: '/manage'
+      fullPath: '/manage'
+      preLoaderRoute: typeof AuthenticatedManageRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/courses/$slug': {
       id: '/courses/$slug'
@@ -152,16 +258,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LegalDocumentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/stripe-webhook': {
+      id: '/api/public/stripe-webhook'
+      path: '/api/public/stripe-webhook'
+      fullPath: '/api/public/stripe-webhook'
+      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
+  AuthenticatedManageRoute: typeof AuthenticatedManageRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
+  AuthenticatedManageRoute: AuthenticatedManageRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   LiveTtcRoute: LiveTtcRoute,
   MentorshipRoute: MentorshipRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   RetreatsRoute: RetreatsRoute,
   CoursesSlugRoute: CoursesSlugRoute,
   LegalDocumentRoute: LegalDocumentRoute,
+  ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

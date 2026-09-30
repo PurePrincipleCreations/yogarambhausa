@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { LogOut } from "lucide-react";
-import { useAuthStore } from "@/stores/useAuthStore";
+import { LayoutDashboard, LogOut, Users } from "lucide-react";
+import { isStaff, useAuthStore } from "@/stores/useAuthStore";
 import yogarambhaLogo from "@/assets/logo-yogarambha.png.asset.json";
 import kasratshalaLogo from "@/assets/logo-kasratshala.png.asset.json";
 
@@ -29,6 +29,7 @@ export function Navbar() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const openAuthModal = useAuthStore((state) => state.openAuthModal);
   const logout = useAuthStore((state) => state.logout);
+  const staff = useAuthStore((state) => isStaff(state.roles));
 
   useEffect(() => {
     if (!navRef.current) return;
@@ -112,7 +113,16 @@ export function Navbar() {
                   <span className="block truncate text-xs font-normal text-muted-foreground">{user?.email}</span>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={logout} className="rounded-lg py-2.5">
+                <DropdownMenuItem asChild className="rounded-lg py-2.5">
+                  <Link to="/community"><Users aria-hidden="true" /> Community</Link>
+                </DropdownMenuItem>
+                {staff && (
+                  <DropdownMenuItem asChild className="rounded-lg py-2.5">
+                    <Link to="/manage"><LayoutDashboard aria-hidden="true" /> Manage students</Link>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => void logout()} className="rounded-lg py-2.5">
                   <LogOut aria-hidden="true" /> Sign Out
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -120,14 +130,14 @@ export function Navbar() {
           ) : (
             <Button
               variant="ghost"
-              onClick={openAuthModal}
+              onClick={() => openAuthModal()}
               className="rounded-full px-4 text-sm font-medium text-slate-800 hover:bg-white/70"
             >
               Log In
             </Button>
           )}
           {!isAuthenticated && (
-            <Button onClick={openAuthModal} className="rounded-full bg-ember px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_16px_35px_-14px_oklch(0.7_0.2_42/0.95)] transition-all duration-300 hover:bg-ember/90">
+            <Button onClick={() => openAuthModal("signup")} className="rounded-full bg-ember px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_16px_35px_-14px_oklch(0.7_0.2_42/0.95)] transition-all duration-300 hover:bg-ember/90">
               Sign Up
             </Button>
           )}

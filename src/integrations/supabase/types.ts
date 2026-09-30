@@ -14,6 +14,104 @@ export type Database = {
   }
   public: {
     Tables: {
+      community_posts: {
+        Row: {
+          author_name: string
+          content: string
+          created_at: string
+          id: string
+          tag: Database["public"]["Enums"]["post_tag"]
+          title: string
+          user_id: string
+          video_url: string | null
+        }
+        Insert: {
+          author_name?: string
+          content: string
+          created_at?: string
+          id?: string
+          tag?: Database["public"]["Enums"]["post_tag"]
+          title: string
+          user_id: string
+          video_url?: string | null
+        }
+        Update: {
+          author_name?: string
+          content?: string
+          created_at?: string
+          id?: string
+          tag?: Database["public"]["Enums"]["post_tag"]
+          title?: string
+          user_id?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      community_replies: {
+        Row: {
+          author_name: string
+          content: string
+          created_at: string
+          id: string
+          is_teacher_reply: boolean
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          author_name?: string
+          content: string
+          created_at?: string
+          id?: string
+          is_teacher_reply?: boolean
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          author_name?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_teacher_reply?: boolean
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_replies_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      enrollments: {
+        Row: {
+          course_slug: string
+          created_at: string
+          id: string
+          source: string
+          stripe_session_id: string | null
+          user_id: string
+        }
+        Insert: {
+          course_slug: string
+          created_at?: string
+          id?: string
+          source?: string
+          stripe_session_id?: string | null
+          user_id: string
+        }
+        Update: {
+          course_slug?: string
+          created_at?: string
+          id?: string
+          source?: string
+          stripe_session_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       mentorship_bookings: {
         Row: {
           created_at: string
@@ -62,15 +160,119 @@ export type Database = {
         }
         Relationships: []
       }
+      notes: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          lesson_id: string
+          user_id: string
+          video_timestamp: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          lesson_id: string
+          user_id: string
+          video_timestamp?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          user_id?: string
+          video_timestamp?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      video_progress: {
+        Row: {
+          id: string
+          is_completed: boolean
+          lesson_id: string
+          total_seconds: number
+          updated_at: string
+          user_id: string
+          watched_seconds: number
+        }
+        Insert: {
+          id?: string
+          is_completed?: boolean
+          lesson_id: string
+          total_seconds?: number
+          updated_at?: string
+          user_id: string
+          watched_seconds?: number
+        }
+        Update: {
+          id?: string
+          is_completed?: boolean
+          lesson_id?: string
+          total_seconds?: number
+          updated_at?: string
+          user_id?: string
+          watched_seconds?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_staff: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "student" | "manager" | "admin"
+      post_tag: "form_check" | "question" | "win"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -197,6 +399,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["student", "manager", "admin"],
+      post_tag: ["form_check", "question", "win"],
+    },
   },
 } as const
