@@ -1,3 +1,4 @@
+import { GatheringPromoCard } from "@/components/GatheringPromoCard";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
@@ -21,6 +22,13 @@ export const Route = createFileRoute("/_authenticated/community")({
   }),
   component: CommunityPage,
 });
+
+function timeAgo(iso: string) {
+  const s = Math.max(1, Math.floor((Date.now() - new Date(iso).getTime()) / 1000));
+  const units: [number, string][] = [[31536000, "year"], [2592000, "month"], [604800, "week"], [86400, "day"], [3600, "hour"], [60, "minute"]];
+  for (const [sec, name] of units) if (s >= sec) { const n = Math.floor(s / sec); return `${n} ${name}${n > 1 ? "s" : ""} ago`; }
+  return "just now";
+}
 
 const TAGS = [
   { value: "form_check", label: "Form Check" },
@@ -75,7 +83,8 @@ function CommunityPage() {
     <>
       <Navbar />
       <main className="min-h-screen bg-muted px-5 pt-32 pb-20 sm:px-8">
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
+        <div className="min-w-0">
           <p className="text-xs font-semibold tracking-[0.18em] text-ember uppercase">Sangha</p>
           <h1 className="mt-2 text-4xl font-bold text-foreground sm:text-5xl">Community</h1>
           <p className="mt-3 text-muted-foreground">Ask questions, share your form for feedback, and celebrate progress.</p>
@@ -107,6 +116,10 @@ function CommunityPage() {
             {shown.length === 0 && <li className="rounded-3xl bg-card p-8 text-center text-muted-foreground">No posts yet — start the conversation.</li>}
             {shown.map((p) => <PostCard key={p.id} post={p} />)}
           </ul>
+        </div>
+        <aside className="lg:pt-24">
+          <div className="lg:sticky lg:top-28"><GatheringPromoCard /></div>
+        </aside>
         </div>
       </main>
     </>
@@ -143,7 +156,7 @@ function PostCard({ post }: { post: Post }) {
         <span className="rounded-full bg-ember/10 px-3 py-1 font-semibold text-ember">{TAGS.find((t) => t.value === post.tag)?.label}</span>
         <span>{post.author_name}</span>
         <span>·</span>
-        <span>{new Date(post.created_at).toLocaleDateString()}</span>
+        <span>{timeAgo(post.created_at)}</span>
       </div>
       <h2 className="mt-3 text-xl font-semibold text-card-foreground">{post.title}</h2>
       <p className="mt-2 whitespace-pre-line leading-relaxed text-muted-foreground">{post.content}</p>
@@ -154,12 +167,14 @@ function PostCard({ post }: { post: Post }) {
       )}
       <div className="mt-5 space-y-3 border-t border-border/60 pt-4">
         {replies.map((r) => (
-          <div key={r.id} className={`rounded-2xl p-3.5 text-sm ${r.is_teacher_reply ? "border border-ember/30 bg-ember/5" : "bg-muted"}`}>
-            <p className="flex items-center gap-2 text-xs font-semibold text-foreground">
+          <div key={r.id} className={`rounded-2xl p-3.5 text-sm ${r.is_teacher_reply ? "bg-ink text-background shadow-md" : "bg-muted"}`}>
+            <p className={`flex flex-wrap items-center gap-2 text-xs font-semibold ${r.is_teacher_reply ? "text-background" : "text-foreground"}`}>
               {r.is_teacher_reply && <GraduationCap className="size-3.5 text-ember" aria-hidden="true" />}
-              {r.author_name}{r.is_teacher_reply && <span className="text-ember">· Teacher</span>}
+              {r.author_name}
+              {r.is_teacher_reply && <span className="rounded-full bg-ember px-2 py-0.5 text-[0.6rem] tracking-[0.14em] text-primary-foreground">TEACHER</span>}
+              <span className={`font-normal ${r.is_teacher_reply ? "text-background/60" : "text-muted-foreground"}`}>{timeAgo(r.created_at)}</span>
             </p>
-            <p className="mt-1 whitespace-pre-line text-muted-foreground">{r.content}</p>
+            <p className={`mt-1 whitespace-pre-line ${r.is_teacher_reply ? "text-background/90" : "text-muted-foreground"}`}>{r.content}</p>
           </div>
         ))}
         <form onSubmit={reply} className="flex gap-2">
