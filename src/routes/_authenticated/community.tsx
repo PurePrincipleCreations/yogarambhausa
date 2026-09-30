@@ -31,9 +31,9 @@ function timeAgo(iso: string) {
 }
 
 const TAGS = [
-  { value: "form_check", label: "Form Check" },
-  { value: "question", label: "Question" },
-  { value: "win", label: "Win" },
+  { value: "form_check", label: "FORM CHECK" },
+  { value: "question", label: "QUESTION" },
+  { value: "win", label: "WIN" },
 ] as const;
 type Tag = (typeof TAGS)[number]["value"];
 
