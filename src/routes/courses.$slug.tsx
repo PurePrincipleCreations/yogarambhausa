@@ -3,6 +3,7 @@ import { CoursePlayerPage } from "@/components/CoursePlayerPage";
 
 export const Route = createFileRoute("/courses/$slug")({
   ssr: false,
+  validateSearch: (s: Record<string, unknown>): { lesson?: string } => (typeof s['lesson'] === "string" ? { lesson: s['lesson'] } : {}),
   head: ({ params }) => ({
     meta: [
       { title: `${params.slug.replaceAll("-", " ")} Course — Yogarambha` },
@@ -18,5 +19,6 @@ export const Route = createFileRoute("/courses/$slug")({
 
 function CourseRoute() {
   const { slug } = Route.useParams();
-  return <CoursePlayerPage slug={slug} />;
+  const { lesson } = Route.useSearch();
+  return <CoursePlayerPage slug={slug} initialLessonId={lesson} />;
 }

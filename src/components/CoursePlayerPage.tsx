@@ -43,10 +43,10 @@ function LessonStatus({ done, pct, locked }: { done: boolean; pct: number; locke
   );
 }
 
-export function CoursePlayerPage({ slug }: { slug: string }) {
+export function CoursePlayerPage({ slug, initialLessonId }: { slug: string; initialLessonId?: string | undefined }) {
   const root = useRef<HTMLElement>(null);
   const course = useMemo(() => courses.find((item) => item.slug === slug), [slug]);
-  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+  const [activeVideoIndex, setActiveVideoIndex] = useState(() => Math.max(0, course?.videos.findIndex((v) => v.id === initialLessonId) ?? 0));
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const userId = useAuthStore((state) => state.user?.id);
   const owns = useOwnsCourse(slug);

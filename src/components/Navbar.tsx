@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { CalendarHeart, LayoutDashboard, LogOut, Users } from "lucide-react";
+import { BookOpen, CalendarHeart, LayoutDashboard, LogOut, Users } from "lucide-react";
 import { isStaff, useAuthStore } from "@/stores/useAuthStore";
 import yogarambhaLogo from "@/assets/logo-yogarambha.png.asset.json";
 import kasratshalaLogo from "@/assets/logo-kasratshala.png.asset.json";
@@ -113,6 +113,9 @@ export function Navbar() {
                   <span className="block truncate text-xs font-normal text-muted-foreground">{user?.email}</span>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem asChild className="rounded-lg py-2.5">
+                  <Link to="/my-courses"><BookOpen aria-hidden="true" /> My Courses</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild className="rounded-lg py-2.5">
                   <Link to="/community"><Users aria-hidden="true" /> Community</Link>
                 </DropdownMenuItem>

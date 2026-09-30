@@ -195,6 +195,9 @@
   --color-ember: oklch(0.7 0.2 42);
   --color-ember-soft: oklch(0.86 0.09 55);
   --color-ink: oklch(0.28 0.03 260);
+  --color-earth: oklch(0.29 0.04 45);
+  --color-earth-foreground: oklch(0.95 0.02 75);
+  --color-amber-glow: oklch(0.8 0.16 75);
   --color-canvas: oklch(0.985 0.003 90);
   --font-display: "Playfair Display", Georgia, serif;
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
