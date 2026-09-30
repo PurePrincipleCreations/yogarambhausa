@@ -96,7 +96,7 @@ export function CoursePlayerPage({ slug }: { slug: string }) {
   };
 
   return (
-    <main ref={root} className="min-h-screen bg-muted pt-28 font-sans lg:h-screen lg:overflow-hidden">
+    <main ref={root} className="min-h-screen bg-muted pt-28 font-sans">
       <div className="mx-auto grid min-h-[calc(100vh-7rem)] max-w-[100rem] grid-cols-1 gap-8 px-5 pb-8 sm:px-8 lg:grid-cols-12">
         <section className="player-stage flex min-w-0 flex-col lg:col-span-8 xl:col-span-9">
           <Link
