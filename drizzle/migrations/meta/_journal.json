@@ -22,6 +22,13 @@
       "when": 1788585898380,
       "tag": "0002_add_mentorship_journey",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790757988360,
+      "tag": "0003_lms_roles_enrollments_community",
+      "breakpoints": true
     }
   ]
 }
